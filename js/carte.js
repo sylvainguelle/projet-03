@@ -1,10 +1,13 @@
+//declaration variable
 var mymap = L.map('carte').setView([45.760033,4.838189],15);//inialisation carte avec centre et zoom
 var calqueMarqueur = L.layerGroup().addTo(mymap); // creation calque pour affichage des marqueurs
 var coordMap = mymap.getBounds();//inialisation tableau d'objet des coordonnées
 var stations = [];// inialisation tableau objet des stations
+var marqueursInfos =[];// tableau info marqueurs
 var url = "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058";
-appelJCDecaux();
+
 //function requete vers api JCDecaux et maj tableau stations
+appelJCDecaux();
 function appelJCDecaux() {
   ajaxGet(url, function (reponse) { //
       var reponseElt = JSON.parse(reponse);
@@ -13,14 +16,21 @@ function appelJCDecaux() {
   });
 };
 
+//mise en forme des donnée
 //functions ajout marqueurs
 function AjouterMarqueur() {
-  //effacer marqueurs
-  calqueMarqueur.clearLayers();
+  calqueMarqueur.clearLayers();//effacer marqueurs
   for (var i = 0; i < stations.length; i++) {
-    //recuperer position
+    //recuperer position, nom , adresse nb de velo et de stand
     var stationLat = stations[i].position.lat ;
     var stationLng = stations[i].position.lng ;
+    var stationName = stations[i].name ;
+    var stationAddress = stations[i].address ;
+    //var stationBikes = stations[i].totalStands.availabilities.bikes ;
+    //var stationsStands = stations[i].totalStands.availabilities.stands ;
+    var marqueur = {name: stationName,address:stationAddress,/*bike:stationBikes,
+    stand:stationsStands,*/lat:stationLat,lng:stationLng};
+    marqueursInfos.push(marqueur);
     //verification position station par rapport limite de la carte affiché
     if ((stationLat<coordMap._northEast.lat)&&(stationLat>coordMap._southWest.lat)
     &&(stationLng<coordMap._northEast.lng)&&(stationLng>coordMap._southWest.lng))
@@ -29,8 +39,8 @@ function AjouterMarqueur() {
       var marqueur = L.marker([stationLat,stationLng]).addTo(calqueMarqueur);
     };
   };
+  console.log(marqueursInfos);
 };
-
 
 //option de la carte mapbox
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -69,12 +79,5 @@ ajaxGet(url, function (reponse) {
       standStation.textContent = " Nombre d'emplacement : "+reponseElt[i].bike_stands;
       var disponibleStation = document.createElement("p");
       disponibleStation.textContent = "Nombre de vélo disponible : "+reponseElt[i].available_bikes;
-      divElt.appendChild(numberStation);
-      divElt.appendChild(nomStation);
-      divElt.appendChild(statusStation);
-      divElt.appendChild(standStation);
-      divElt.appendChild(disponibleStation);
-      divElt.appendChild(brElt);
-      stationElt.appendChild(divElt);
     };
 });*/

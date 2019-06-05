@@ -23,6 +23,7 @@ li {
   left: 50%;
   top: 0;
   border: solid #75b8c8 2px;
+  border-radius: 10px;
 }
 
 .control {
