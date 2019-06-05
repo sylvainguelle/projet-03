@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+      integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+      crossorigin=""></script>
+    <title>Reservation de vélo JCDecaux</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <a class="navbar-brand" href="#">Velab</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="#">Tutoriel<span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="#carte">Carte</a>
+          <a class="nav-item nav-link" href="#">Réservation</a>
+          <a class="nav-item nav-link" href="#">Contact</a>
+        </div>
+      </div>
+    </nav>
+    <div class="main container-fluid">
+      <div id="diaporama">
+        <ul>
+          <li><img src="./media/01.jpg" alt="" class="img-carousel"></li>
+          <li><img src="./media/02.jpg" alt="" class="img-carousel"></li>
+          <li><img src="./media/03.jpg" alt="" class="img-carousel"></li>
+          <li><img src="./media/04.jpg" alt="" class="img-carousel"></li>
+          <li><img src="./media/05.jpg" alt="" class="img-carousel"></li>
+          <li><img src="./media/06.jpg" alt="" class="img-carousel"></li>
+        </ul>
+        <div class="control">
+          <button type="button" name="prev" class="btn btn-info prev">Précédent</button>
+          <button type="button" name="next" class="btn btn-info next">Suivant</button>
+        </div>
+      </div>
+
+      <div id="affichage-carte" class="row">
+          <div class="carte-velo col-lg-6">
+            <div id="carte"></div>
+          </div>
+          <div class="detail-station col-lg-6">
+            <h3>Nom de la station</h3>
+            <p id="nomStation"></p>
+            <h3>Adresse</h3>
+            <p id="adresseStation"></p>
+            <h3>Nombre de vélo disponible</h3>
+            <p id="nbVeloDispoStation"></p>
+            <h3>Nombre d'emplacement</h3>
+            <p id="nbEmplacementStation"></p>
+            <button class="btn btn-success" type="button" name="button">Réservation d'un vélo</button>
+          </div>
+
+        </div>
+
+      <div id="reservation">
+        <h2>Reservation</h2>
+        <div class="" style="height:800px">
+
+        </div>
+      </div>
+      <script src="./js/jquery-3.4.1.min.js"></script>
+      <script src="./js/ajax.js"></script>
+      <script src="./js/diaporama.js"></script>
+      <script src="./js/carte.js"></script>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+body {
+  background-color: #cdd3d5 ;
+}
+
+nav {
+  background-color: #75b8c8 ;
+}
+
+#diaporama{
+  position: relative;
+  width: 640px;
+  height: 540px;
+  margin: auto;
+}
+
+li {
+  list-style-type: none;
+}
+
+.img-carousel {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 0;
+  border: solid #75b8c8 2px;
+}
+
+.control {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 0;
+}
+
+#affichage-carte {
+  padding-top: 50px;
+}
+
+#carte {
+  width: 100% ;
+  height: 600px ;
+}
