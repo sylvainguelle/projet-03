@@ -25,7 +25,7 @@ function appelJCDecaux() {
       for (const item of reponseElt) {
         const marqueursInfos = {
           name: item.name,
-          address: item.address,
+          address: item.adress,
           bike: item.available_bikes,
           stand: item.bike_stands,
           lat: item.position.lat,
