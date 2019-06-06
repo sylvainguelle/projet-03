@@ -33,7 +33,6 @@ function appelJCDecaux() {
         };
         stations.push(marqueursInfos);
       };
-      console.log(stations);
       updateMap();
   });
 };
@@ -42,7 +41,7 @@ function appelJCDecaux() {
 function updateMap() {
   calqueMarqueur.clearLayers();//effacer marqueurs
   for (let i = 0; i < stations.length; i++) {
-    let marqueur = L.marker([stations[i].lat,stations[i].lng]);
+    const marqueur = L.marker([stations[i].lat,stations[i].lng]);
     marqueur.options.station = stations[i];
     marqueur.on('click', function (e){
       const currentMarker = e.target;
@@ -62,6 +61,27 @@ function updateMap() {
   };
 };
 
+//fonction formulaire inscription
+function AddInscriptionForm() {
+  const formBr = document.createElement('br');
+  const formNom = document.createElement('input');
+  formNom.defaultValue = "Nom";
+  formNom.required = true;
+  const formPrenom = document.createElement('input');
+  formPrenom.defaultValue = "Prenom";
+  formPrenom.required = true;
+  const formButton = document.createElement('button');
+  formButton.textContent = "Valider la réservation";
+  formButton.classList.add("btn","btn-success");
+  const form = document.createElement('form');
+  form.appendChild(formNom);
+  form.appendChild(formBr);
+  form.appendChild(formPrenom);
+  form.appendChild(formBr);
+  form.appendChild(formButton);
+  document.getElementById('formulaire-inscription').appendChild(form);
+};
+
 //lancement de la fonction d'appel
 appelJCDecaux();
 
@@ -70,12 +90,15 @@ mymap.on('moveend',function (){
   updateMap();
 });
 
+//evenement clic sur le bouton d'incription
 inscriptionButton.addEventListener('click',function(){
   //verifier qu'une station est bien selectionnée
   if (nameStationElt.textContent.length>0) {
     //verifier si velo dispo >0
     if (Number(avBikesStationElt.textContent)>0) {
       //afficher formulaire
+      AddInscriptionForm();
+
       //evenement validation formulaire
       //ouvrir canvas signature
       //valider canvas
@@ -84,6 +107,7 @@ inscriptionButton.addEventListener('click',function(){
       //reset de la reservation
     }
     else {
+      //faire un delais puis effacer le contenue
       document.getElementById('bouton-inscription-info').textContent = 'pas de velo disponible'
     }
   }
