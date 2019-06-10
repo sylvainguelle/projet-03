@@ -22,8 +22,8 @@ li {
   transform: translateX(-50%);
   left: 50%;
   top: 0;
-  border: solid #75b8c8 2px;
-  border-radius: 10px;
+  border: 2px solid #75b8c8;
+  border-radius: 15px;
 }
 
 .control {
@@ -47,12 +47,12 @@ li {
 }
 
 #carte {
-  border: 2px solid black;
+  border: 2px solid #75b8c8;
   border-radius: 15px;
 }
 
 .detail-station {
-  border: 2px solid black;
+  border: 2px solid #75b8c8;
   border-radius: 15px;
   padding: 15px;
 }

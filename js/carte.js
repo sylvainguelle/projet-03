@@ -174,11 +174,39 @@ function canvas() {
 };
 
 function addReservation() {
-  const reservationText = document.getElementById("reservation");
-  reservationText.textContent = "Vous avez réservez un velo à la station "+
-  document.getElementById('nomStation').innerText+
-  ", à l'adresse "+document.getElementById('adresseStation').innerText;
-}
+  document.getElementById("reservation").textContent =
+  "Vous avez réservez un velo à la station "+
+  document.getElementById('nomStation').innerText+", "+
+  document.getElementById('adresseStation').innerText;
+  timerReservation();
+  document.getElementById('bouton-inscription-info').textContent = "la réservation d'un nouveau velo annulera la réservation en cours";
+};
+
+function timerReservation() {
+  let time = 1*60*1000;
+  function timer() {
+    time = (time-1000);
+    const minute = Math.floor(time / 60000);
+    const second = ((time%60000)/1000).toFixed(0);
+    //console.log(minute+":"+(second<10 ?'0':'')+second);
+    document.getElementById('timer').textContent = "réservation valide pendant : "
+    +minute+" minute(s) "+(second<10 ?'0':'')+second+" seconde(s) ";
+    if (time<0) {
+      clearInterval(interval);
+      document.getElementById('timer').textContent = "";
+      document.getElementById("reservation").textContent = "Pas de réservation en cours";
+      document.getElementById('bouton-inscription-info').textContent = "";
+
+    };
+  };
+    inscriptionButton.addEventListener('click',function(){
+      clearInterval(interval);
+      document.getElementById('timer').textContent = "";
+      document.getElementById("reservation").textContent = "Pas de réservation en cours";
+      document.getElementById('bouton-inscription-info').textContent = "";
+    });
+  const interval = setInterval(timer, 1000);
+};
 
 
 //lancement de la fonction d'appel
@@ -199,12 +227,16 @@ inscriptionButton.addEventListener('click',function(){
       AddInscriptionForm();
     }
     else {
-      //faire un delais puis effacer le contenue
-      document.getElementById('bouton-inscription-info').textContent = 'pas de velo disponible'
+      document.getElementById('bouton-inscription-info').textContent = 'pas de velo disponible';
+      setTimeout(function() {
+        document.getElementById('bouton-inscription-info').textContent = '';
+      },5000);
     }
   }
   else {
-    //faire un delais puis effacer le contenue
-    document.getElementById('bouton-inscription-info').textContent = 'pas de station selectionnée'
+    document.getElementById('bouton-inscription-info').textContent = 'pas de station selectionnée';
+    setTimeout(function() {
+      document.getElementById('bouton-inscription-info').textContent = '';
+    },5000);
   }
 });
