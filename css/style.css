@@ -24,6 +24,7 @@ li {
   top: 0;
   border: 2px solid #75b8c8;
   border-radius: 15px;
+  height: 480px;
 }
 
 .control {
