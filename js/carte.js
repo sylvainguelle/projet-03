@@ -183,7 +183,7 @@ function addReservation() {
 };
 
 function timerReservation() {
-  let time = 1*60*1000;
+  let time = 20*60*1000;
   function timer() {
     time = (time-1000);
     const minute = Math.floor(time / 60000);

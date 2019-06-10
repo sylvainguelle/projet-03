@@ -41,19 +41,23 @@ li {
 #carte {
   width: 100% ;
   height: 600px ;
+  border: 2px solid #75b8c8;
+  border-radius: 15px;
 }
 
 #bouton-inscription-info{
   color: red;
 }
 
-#carte {
-  border: 2px solid #75b8c8;
-  border-radius: 15px;
-}
-
 .detail-station {
   border: 2px solid #75b8c8;
   border-radius: 15px;
   padding: 15px;
+}
+
+.div-reservation {
+  border: 2px solid #75b8c8;
+  border-radius: 15px;
+  /*padding: 15px;*/
+  margin-top: 15px;
 }
