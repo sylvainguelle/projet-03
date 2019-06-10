@@ -45,3 +45,14 @@ li {
 #bouton-inscription-info{
   color: red;
 }
+
+#carte {
+  border: 2px solid black;
+  border-radius: 15px;
+}
+
+.detail-station {
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 15px;
+}
