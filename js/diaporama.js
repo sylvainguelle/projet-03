@@ -1,6 +1,6 @@
-var $carousel = $('#diaporama');// cible la div du diapo
-var $imgCarousel = $('#diaporama img');// cible tableau les img du diapo
-var indexImg = $imgCarousel.length - 1;// creation index selon nombre image
+const $carousel = $('#diaporama');// cible la div du diapo
+const $imgCarousel = $('#diaporama img');// cible tableau les img du diapo
+const indexImg = $imgCarousel.length - 1;// creation index selon nombre image
 //inialisation du diapo
 i=0;
 $currentImg = $imgCarousel.eq(i);//definition de l'image courante = 0
