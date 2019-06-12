@@ -68,13 +68,24 @@ function AddInscriptionForm() {
     const formNom = document.createElement('input');
     formNom.type = "text";
     formNom.name = "nom";
-    formNom.defaultValue = "Nom";
     formNom.required = true;
     const formPrenom = document.createElement('input');
     formPrenom.type = "text";
     formPrenom.name = "prenom";
-    formPrenom.defaultValue = "Prénom";
     formPrenom.required = true;
+    //verifier si nom prenom sont stocker et les afficher
+    if (localStorage.getItem('nom')==null) {
+      formNom.defaultValue = 'Nom';
+    }
+    else {
+      formNom.defaultValue = localStorage.getItem('nom');
+    }
+    if (localStorage.getItem('prenom')==null) {
+      formPrenom.defaultValue = 'Prénom';
+    }
+    else {
+      formPrenom.defaultValue = localStorage.getItem('prenom');
+    }
     const formButton = document.createElement('button');
     formButton.textContent = "Valider la réservation";
     formButton.classList.add("btn","btn-success");
@@ -88,8 +99,8 @@ function AddInscriptionForm() {
     //evenement validation formulaire
     formButton.addEventListener('click', function (e){
       //stocker données formulaire api web storage
-      console.log(form[0].value);
-      console.log(form[1].value);
+      localStorage.setItem('nom',form[0].value) ;
+      localStorage.setItem('prenom',form[1].value);
       //fermer formulaire
       document.getElementById('formulaire-inscription').removeChild(form);
       //ouvrir canvas signature
@@ -102,8 +113,8 @@ function AddInscriptionForm() {
 //fonction canvas de signature
 function canvas() {
 	const canvas = document.createElement("canvas");
-	canvas.height = 200;
-	canvas.width = 400;
+	canvas.height = 150;
+	canvas.width = 200;
 	canvas.style.border = "1px solid black";
 	canvas.style.backgroundColor = "white";
 	const ctx = canvas.getContext("2d");
@@ -136,12 +147,33 @@ function canvas() {
 		mousePos = getMousePos(canvas, e);
 	},false);
 
+  //evenement touch pour tactile
+  canvas.addEventListener("touchstart", function (e) {
+		drawing = true;
+		lastPos = getTouchPos(canvas, e);
+	},false);
+	canvas.addEventListener("touchend", function (e) {
+		drawing = false;
+	},false);
+	canvas.addEventListener("touchmove", function (e) {
+		mousePos = getTouchPos(canvas, e);
+	},false);
+
 	//obtenir la position de la souris par rapport au canvas
 	function getMousePos (canvasDom, mouseEvent) {
 		const rect = canvasDom.getBoundingClientRect();
 		return {
 			x: mouseEvent.clientX - rect.left ,
 			y: mouseEvent.clientY - rect.top
+		};
+	};
+
+  //obtenir la position de la souris par rapport au canvas
+	function getTouchPos (canvasDom, touchEvent) {
+		const rect = canvasDom.getBoundingClientRect();
+		return {
+			x: touchEvent.clientX - rect.left ,
+			y: touchEvent.clientY - rect.top
 		};
 	};
 
