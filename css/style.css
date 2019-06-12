@@ -72,8 +72,7 @@ li {
 .div-reservation {
   border: 2px solid #506c64;
   border-radius: 15px;
-  /*padding: 15px;*/
-  margin-top: 15px;
+  margin: 15px auto;
 }
 
 /* Extra small devices (portrait phones, less than 576px)*/

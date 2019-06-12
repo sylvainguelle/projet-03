@@ -112,7 +112,8 @@ function canvas() {
 	const canvasButton = document.createElement('button');
 	canvasButton.classList.add("btn","btn-success");
 	canvasButton.textContent = "Valider la signature";
-	document.getElementById("formulaire-inscription").appendChild(canvasButton);
+  document.getElementById("formulaire-inscription").appendChild(document.createElement("br"));
+  document.getElementById("formulaire-inscription").appendChild(canvasButton);
 
 	canvasButton.addEventListener('click', function () {
 		document.getElementById("formulaire-inscription").removeChild(canvas);

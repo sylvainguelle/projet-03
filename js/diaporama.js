@@ -1,6 +1,7 @@
 const $carousel = $('#diaporama');// cible la div du diapo
 const $imgCarousel = $('#diaporama img');// cible tableau les img du diapo
 const indexImg = $imgCarousel.length - 1;// creation index selon nombre image
+let pause = false;// variable etat bouton pause
 //inialisation du diapo
 i=0;
 $currentImg = $imgCarousel.eq(i);//definition de l'image courante = 0
@@ -32,20 +33,26 @@ $('.prev').click(function(){
   }
 });
 
+$('.pause').click(function(){
+  pause = !pause;
+});
+
 //fonction slide automatique des image
 function slideImg() {
-  setTimeout(function(){
-    if(i<indexImg){//condition si inferieur à la derniere image
-      i++;
-    }
-    else {//sinon reset de i
-      i=0;
-    }
-    $imgCarousel.css('display','none');//masque
-    $currentImg=$imgCarousel.eq(i);//nouvelle img courante
-    $currentImg.css('display','block');//affiche nouvelle img courante
+  const timer = setTimeout(function(){
+    if (pause==false) {
+      if(i<indexImg){//condition si inferieur à la derniere image
+          i++;
+      }
+      else {//sinon reset de i
+          i=0;
+      }
+      $imgCarousel.css('display','none');//masque
+      $currentImg=$imgCarousel.eq(i);//nouvelle img courante
+      $currentImg.css('display','block');//affiche nouvelle img courante
+    };
     slideImg();//relance la fonction pour creer la boucle infinie
-  },5000);
+    },5000);
 };
 
 slideImg();//premier lancement de la fonction de slide automatique
