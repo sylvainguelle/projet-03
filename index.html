@@ -2,16 +2,16 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+  <!--  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
    crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
       integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-      crossorigin=""></script>
+      crossorigin=""></script> -->
     <title>Reservation de vélo JCDecaux</title>
   </head>
   <body>
@@ -28,9 +28,9 @@
           <li><img src="./media/diapo05.jpg" alt="" class="img-carousel"></li>
         </ul>
         <div class="control">
-          <button type="button" name="prev" class="btn btn-info prev"><i class="fas fa-caret-left"></i></button>
-          <button type="button" name="pause" class="btn btn-info pause"><i class="fas fa-pause"></i></button>
-          <button type="button" name="next" class="btn btn-info next"><i class="fas fa-caret-right"></i></button>
+          <button type="button" name="prev" class="btn btn-info" id="prev"><i class="fas fa-caret-left"></i></button>
+          <button type="button" name="pause" class="btn btn-info" id="pause"><i class="fas fa-pause"></i></button>
+          <button type="button" name="next" class="btn btn-info" id="next"><i class="fas fa-caret-right"></i></button>
         </div>
       </div>
 
@@ -62,10 +62,10 @@
         <p id="timer"></p>
         <p id="reservation">Pas de réservation en cours</p>
       </div>
-      <script src="./js/jquery-3.4.1.min.js"></script>
+      <!--<script src="./js/jquery-3.4.1.min.js"></script>-->
       <script src="./js/ajax.js"></script>
       <script src="./js/diaporama.js"></script>
-      <script src="./js/carte.js"></script>
+      <!--<script src="./js/carte.js"></script>-->
     </div>
   </body>
 </html>
