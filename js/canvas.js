@@ -14,7 +14,7 @@ function canvas() {
   document.getElementById("formulaire-inscription").appendChild(document.createElement("br"));
   document.getElementById("formulaire-inscription").appendChild(canvasButton);
 
-	canvasButton.addEventListener('click', function () {
+	canvasButton.addEventListener("click", function () {
 		document.getElementById("formulaire-inscription").removeChild(canvas);
 		document.getElementById("formulaire-inscription").removeChild(canvasButton);
     addReservation();
