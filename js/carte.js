@@ -104,10 +104,10 @@ function AddInscriptionForm() {
       //stocker données de reservation avec sessionstorage
       sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
       sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
-      //obtenir heure de reservation et la stocker avec seesionStorage
+      //obtenir heure de reservation et la stocker avec sessionstorage
       const date = new Date();
-      console.log(date.getHours());
-      console.log(date.getMinutes());
+      sessionStorage.setItem("heureReserve",date.getHours());
+      sessionStorage.setItem("minuteReserve",date.getMinutes());
       //fermer formulaire
       document.getElementById("formulaire-inscription").removeChild(form);
       //ouvrir canvas signature
@@ -129,7 +129,9 @@ function addReservation() {
 
 //fonction timer reservation
 function timerReservation() {
+  //variable time de 20 minute
   let time = 20*60*1000;
+  //function timer
   function timer() {
     time = (time-1000);
     const minute = Math.floor(time / 60000);
@@ -154,8 +156,22 @@ function timerReservation() {
   const interval = setInterval(timer, 1000);
 };
 
+//fonction de verification si une reservation existe pendant la session
+function verificationReservation() {
+  if (sessionStorage.getItem("stationReserve") != null){
+    if (confirm(" Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve"))){
+      addReservation();
+    } else {
+      sessionStorage.clear();
+    }
+  };
+}
+
 //lancement de la fonction d'appel
 appelJCDecaux();
+
+//lancement de la fonction de verification si reservation en cours pendant la session
+verificationReservation();
 
 //evenement MAJ coordonnées et marqueurs à la fin d'un deplacement de la carte
 mymap.on("moveend",function (){
