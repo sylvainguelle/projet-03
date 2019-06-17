@@ -15,8 +15,8 @@ function imgDisplayNone() {
   }
 }
 
-//fonction precedente et suivante
-document.getElementById("next").addEventListener("click",function(){//cible bouton next et function au clic dessus
+//fonction slide suivant
+function nextSlide(){//cible bouton next et function au clic dessus
   currentSlide++;//increment de i
   if( currentSlide <= indexImg ){// condition si clic fait passer le i sup au nb d'img
       imgDisplayNone();//masque
@@ -26,9 +26,10 @@ document.getElementById("next").addEventListener("click",function(){//cible bout
     else{// si i est passer à une valeur sup aux nb d'img
       currentSlide = indexImg;
     }
-});
+};
 
-document.getElementById("prev").addEventListener("click",function(){
+//fonction slide precedent
+function prevSlide(){
   currentSlide--;
   if( currentSlide >= 0 ){
     imgDisplayNone();
@@ -38,11 +39,7 @@ document.getElementById("prev").addEventListener("click",function(){
   else{
     currentSlide = 0;
   }
-});
-
-document.getElementById("pause").addEventListener("click",function(){
-  pause = !pause;
-});
+};
 
 //fonction slide automatique des image
 function slideImg() {
@@ -62,3 +59,24 @@ function slideImg() {
 };
 
 slideImg();//premier lancement de la fonction de slide automatique
+
+//evenement appuie sur bouton pause
+document.getElementById("pause").addEventListener("click",function(){
+  pause = !pause;
+});
+
+//evenement clic sur bouton precedent
+document.getElementById("prev").addEventListener("click",prevSlide);
+
+//evenement clic sur bouton next
+document.getElementById("next").addEventListener("click",nextSlide);
+
+//evenement appuie sur fleche droite ou gauche
+document.addEventListener("keydown", function(e) {
+  if (e.keyCode === 37 ) {
+    prevSlide();
+  }
+  else if (e.keyCode === 39 ) {
+    nextSlide();
+  };
+});
