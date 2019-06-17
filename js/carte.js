@@ -104,6 +104,10 @@ function AddInscriptionForm() {
       //stocker données de reservation avec sessionstorage
       sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
       sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
+      //obtenir heure de reservation et la stocker avec seesionStorage
+      const date = new Date();
+      console.log(date.getHours());
+      console.log(date.getMinutes());
       //fermer formulaire
       document.getElementById("formulaire-inscription").removeChild(form);
       //ouvrir canvas signature
