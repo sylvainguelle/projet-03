@@ -16,9 +16,9 @@ function imgDisplayNone() {
 }
 
 //fonction slide suivant
-function nextSlide(){//cible bouton next et function au clic dessus
+function nextSlide(){
   currentSlide++;//increment de i
-  if( currentSlide <= indexImg ){// condition si clic fait passer le i sup au nb d'img
+  if( currentSlide <= indexImg ){
       imgDisplayNone();//masque
       currentImg = imgCarousel[currentSlide];//nouvelle img courante
       currentImg.style.display = "block";//affiche nouvelle img courante

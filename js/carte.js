@@ -63,6 +63,7 @@ function updateMap() {
 
 //fonction formulaire inscription
 function AddInscriptionForm() {
+  //Condition pour ne pas afficher plusieur fois le formulaire
   if((!document.getElementById("form-button")) && (!document.querySelector("canvas"))){
     const formBr = document.createElement("br");
     const formNom = document.createElement("input");
