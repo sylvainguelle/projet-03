@@ -98,9 +98,12 @@ function AddInscriptionForm() {
     document.getElementById("formulaire-inscription").appendChild(form);
     //evenement validation formulaire
     formButton.addEventListener("click", function (e){
-      //stocker données formulaire api web storage
+      //stocker données formulaire avec local storage
       localStorage.setItem("nom",form[0].value) ;
       localStorage.setItem("prenom",form[1].value);
+      //stocker données de reservation avec sessionstorage
+      sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
+      sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
       //fermer formulaire
       document.getElementById("formulaire-inscription").removeChild(form);
       //ouvrir canvas signature
@@ -114,8 +117,8 @@ function AddInscriptionForm() {
 function addReservation() {
   document.getElementById("reservation").textContent =
   "Vous avez réservé un velo à la station "+
-  document.getElementById("nomStation").innerText+", "+
-  document.getElementById("adresseStation").innerText;
+  sessionStorage.getItem("stationReserve")+", "+
+  sessionStorage.getItem("adresseReserve");
   timerReservation();
   document.getElementById("bouton-inscription-info").textContent = "la réservation d'un nouveau velo annulera la réservation en cours";
 };
