@@ -174,7 +174,7 @@ appelJCDecaux();
 //lancement de la fonction de verification si reservation en cours pendant la session
 verificationReservation();
 
-//evenement MAJ coordonnées et marqueurs à la fin d'un deplacement de la carte
+//evenement MAJ des marqueurs à la fin d'un deplacement de la carte
 mymap.on("moveend",function (){
   updateMap();
 });
