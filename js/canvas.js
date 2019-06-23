@@ -47,9 +47,9 @@ function canvas() {
 		drawLine();
 		lastPos.x = e.touches[0].clientX - canvas.getBoundingClientRect().left;
 		lastPos.y = e.touches[0].clientY - canvas.getBoundingClientRect().top;
-		e.preventDefault;
+		e.preventDefault();
 	});
-	
+
 	canvas.addEventListener("mousedown", function() {
 		drawing = true;
 	});
@@ -58,7 +58,7 @@ function canvas() {
 		lastPos.x = e.touches[0].clientX - canvas.getBoundingClientRect().left;
 		lastPos.y = e.touches[0].clientY - canvas.getBoundingClientRect().top;
 		drawing = true;
-		e.preventDefault;
+		e.preventDefault();
 	});
 
 	canvas.addEventListener("mouseup", function() {
@@ -67,7 +67,7 @@ function canvas() {
 
 	canvas.addEventListener("touchend", function(e) {
 		drawing = false;
-		e.preventDefault;
+		e.preventDefault();
 	});
 
 	function drawLine() {
