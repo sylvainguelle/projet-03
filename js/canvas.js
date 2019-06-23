@@ -49,6 +49,8 @@ function canvas() {
 		lastPos.y = e.touches[0].clientY - canvas.getBoundingClientRect().top;
 		e.preventDefault;
 	});
+	//desactiver scrolling
+	canvas.addEventListener("touchmove", preventDefault, false);
 
 	canvas.addEventListener("mousedown", function() {
 		drawing = true;
