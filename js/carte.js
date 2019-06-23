@@ -147,7 +147,7 @@ function timerReservation() {
       document.getElementById("timer").textContent = "";
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
-
+      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
     };
   };
     inscriptionButton.addEventListener("click",function(){
@@ -155,6 +155,7 @@ function timerReservation() {
       document.getElementById("timer").textContent = "";
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
+      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
     });
   //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
@@ -163,7 +164,7 @@ function timerReservation() {
 //fonction de verification si une reservation existe pendant la session
 function verificationReservation() {
   if (sessionStorage.getItem("stationReserve") != null){
-    if (confirm(" Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve"))){
+    if (confirm("Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve"))){
       addReservation();
     } else {
       sessionStorage.clear();
