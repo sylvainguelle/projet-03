@@ -4,6 +4,7 @@ const calqueMarqueur = L.layerGroup().addTo(mymap); // creation calque pour affi
 const url = "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058";
 let stations = [];// inialisation tableau objet des stations
 let time = 0 //variable pour le timer de reservation
+let reservationEnCours = false //variable pour bloquer le changement de station quand une reservation est en cours
 //element dom à mettre à jour
 const nameStationElt = document.getElementById("nomStation");
 const addressStationElt = document.getElementById("adresseStation");
@@ -47,12 +48,14 @@ function updateMap() {
     const marqueur = L.marker([stations[i].lat,stations[i].lng]);
     marqueur.options.station = stations[i];
     marqueur.on("click", function (e){
-      const currentMarker = e.target;
-      nameStationElt.textContent = currentMarker.options.station.name;
-      addressStationElt.textContent = currentMarker.options.station.address;
-      avBikesStationElt.textContent = currentMarker.options.station.bike;
-      avStandsStationElt.textContent = currentMarker.options.station.stand;
-      statutStationElt.textContent = currentMarker.options.station.status;
+      if (reservationEnCours===false) {
+        const currentMarker = e.target;
+        nameStationElt.textContent = currentMarker.options.station.name;
+        addressStationElt.textContent = currentMarker.options.station.address;
+        avBikesStationElt.textContent = currentMarker.options.station.bike;
+        avStandsStationElt.textContent = currentMarker.options.station.stand;
+        statutStationElt.textContent = currentMarker.options.station.status;
+      };
     });
     //verification position station par rapport limite de la carte affiché
     if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
@@ -134,6 +137,7 @@ function AddInscriptionForm() {
 
 //fonction mise à jour div reservation
 function addReservation() {
+  reservationEnCours=false;
   inscriptionButton.style.display = "block";
   document.getElementById("reservation").textContent =
   "Vous avez réservé un velo à la station "+
@@ -211,6 +215,7 @@ inscriptionButton.addEventListener("click",function(){
     //verifier si velo dispo >0
     if (Number(avBikesStationElt.textContent)>0) {
       //afficher formulaire
+      reservationEnCours = true;
       AddInscriptionForm();
     } else {
       document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
