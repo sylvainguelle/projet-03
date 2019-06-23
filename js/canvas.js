@@ -7,6 +7,7 @@ function canvas() {
 	canvas.style.backgroundColor = "white";
 	//definition contexte 2d canvas
 	const ctx = canvas.getContext("2d");
+	let signatureOk = false;
 	//insertion du canvas sur la page et du bouton validation canvas
 	document.getElementById("formulaire-inscription").appendChild(canvas);
 	const canvasButton = document.createElement('button');
@@ -17,9 +18,13 @@ function canvas() {
 
 	//validation de la signature au clic
 	canvasButton.addEventListener("click", function () {
-		document.getElementById("formulaire-inscription").removeChild(canvas);
-		document.getElementById("formulaire-inscription").removeChild(canvasButton);
-    addReservation();
+		if (signatureOk===false) {
+			alert("Veuillez signer dans le champ de signature")
+		} else {
+			document.getElementById("formulaire-inscription").removeChild(canvas);
+			document.getElementById("formulaire-inscription").removeChild(canvasButton);
+    	addReservation();
+		}
 	});
 
 	//variable de tracking de position
@@ -72,6 +77,7 @@ function canvas() {
 
 	function drawLine() {
 		if (drawing===true) {
+			signatureOk = true;
 			ctx.moveTo(lastPos.x,lastPos.y);
 			ctx.lineTo(mousePos.x,mousePos.y);
 			ctx.stroke();

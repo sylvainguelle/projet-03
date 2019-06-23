@@ -86,12 +86,12 @@ function AddInscriptionForm() {
   labelPrenom.textContent = "Prénom:";
   //verifier si nom prenom sont stocké
   if (localStorage.getItem("nom")==null) {
-    formNom.defaultValue = "Nom";
+    formNom.defaultValue = "";
   } else {
     formNom.defaultValue = localStorage.getItem("nom");
   }
   if (localStorage.getItem("prenom")==null) {
-    formPrenom.defaultValue = "Prénom";
+    formPrenom.defaultValue = "";
   } else {
     formPrenom.defaultValue = localStorage.getItem("prenom");
   }
@@ -109,20 +109,28 @@ function AddInscriptionForm() {
   document.getElementById("formulaire-inscription").appendChild(form);
   //evenement validation formulaire
   formButton.addEventListener("click", function (e){
-    //stocker données formulaire avec local storage
-    localStorage.setItem("nom",form[0].value) ;
-    localStorage.setItem("prenom",form[1].value);
-    //stocker données de reservation avec sessionstorage
-    sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
-    sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
-    //obtenir heure de fin de reservation et la stocker avec sessionstorage
-    const dateEndReservation = new Date().getTime()+20*60*1000;
-    sessionStorage.setItem("heureFinReservation",dateEndReservation);
-    //fermer formulaire
-    document.getElementById("formulaire-inscription").removeChild(form);
-    //ouvrir canvas signature
-    canvas();
-    e.preventDefault();
+    const champA = formNom.value;
+    const champB = formPrenom.value;
+    console.log("a"+champA+"+"+champB);
+    console.log(champA.length+"+"+champB.length);
+    if (formNom.value.length===0||formPrenom.value.length===0) {
+      alert("Veuillez remplir le nom et le prénom")
+    } else {
+      //stocker données formulaire avec local storage
+      localStorage.setItem("nom",form[0].value) ;
+      localStorage.setItem("prenom",form[1].value);
+      //stocker données de reservation avec sessionstorage
+      sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
+      sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
+      //obtenir heure de fin de reservation et la stocker avec sessionstorage
+      const dateEndReservation = new Date().getTime()+20*60*1000;
+      sessionStorage.setItem("heureFinReservation",dateEndReservation);
+      //fermer formulaire
+      document.getElementById("formulaire-inscription").removeChild(form);
+      //ouvrir canvas signature
+      canvas();
+      e.preventDefault();
+    }
   });
 };
 
