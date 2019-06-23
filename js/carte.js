@@ -40,7 +40,7 @@ function appelJCDecaux() {
   });
 };
 
-//fonction ajout marqueur sur la carte
+//fonction ajout ou maj des marqueurs sur la carte
 function updateMap() {
   calqueMarqueur.clearLayers();//effacer marqueurs
   for (let i = 0; i < stations.length; i++) {
@@ -67,27 +67,32 @@ function updateMap() {
 
 //fonction formulaire inscription
 function AddInscriptionForm() {
-  inscriptionButton.style.display = "none";
+  inscriptionButton.style.display = "none";//masque le bouton de reservation
+  //ajout du formulaire
   const formBr = document.createElement("br");
   const formNom = document.createElement("input");
   formNom.type = "text";
-  formNom.name = "nom";
   formNom.required = true;
+  formNom.id = "nom-formulaire"
+  const labelNom = document.createElement("label");
+  labelNom.htmlFor = "nom-formulaire";
+  labelNom.textContent = "Nom:";
   const formPrenom = document.createElement("input");
   formPrenom.type = "text";
-  formPrenom.name = "prenom";
+  formPrenom.id = "prenom-formulaire";
   formPrenom.required = true;
-  //verifier si nom prenom sont stocker et les afficher
+  const labelPrenom = document.createElement("label");
+  labelPrenom.htmlFor = "prenom-formulaire";
+  labelPrenom.textContent = "Prénom:";
+  //verifier si nom prenom sont stocké
   if (localStorage.getItem("nom")==null) {
     formNom.defaultValue = "Nom";
-  }
-  else {
+  } else {
     formNom.defaultValue = localStorage.getItem("nom");
   }
   if (localStorage.getItem("prenom")==null) {
     formPrenom.defaultValue = "Prénom";
-  }
-  else {
+  } else {
     formPrenom.defaultValue = localStorage.getItem("prenom");
   }
   const formButton = document.createElement("button");
@@ -95,7 +100,9 @@ function AddInscriptionForm() {
   formButton.classList.add("btn","btn-success");
   formButton.id = "form-button";
   const form = document.createElement("form");
+  form.appendChild(labelNom);
   form.appendChild(formNom);
+  form.appendChild(labelPrenom);
   form.appendChild(formPrenom);
   form.appendChild(formBr);
   form.appendChild(formButton);
