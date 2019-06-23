@@ -3,6 +3,7 @@ const mymap = L.map("carte").setView([45.760033,4.838189],15);//inialisation car
 const calqueMarqueur = L.layerGroup().addTo(mymap); // creation calque pour affichage des marqueurs
 const url = "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058";
 let stations = [];// inialisation tableau objet des stations
+let time = 0 //variable pour le timer de reservation
 //element dom à mettre à jour
 const nameStationElt = document.getElementById("nomStation");
 const addressStationElt = document.getElementById("adresseStation");
@@ -105,10 +106,9 @@ function AddInscriptionForm() {
       //stocker données de reservation avec sessionstorage
       sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
       sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
-      //obtenir heure de reservation et la stocker avec sessionstorage
-      const date = new Date();
-      sessionStorage.setItem("heureReserve",date.getHours());
-      sessionStorage.setItem("minuteReserve",date.getMinutes());
+      //obtenir heure de fin de reservation et la stocker avec sessionstorage
+      const dateEndReservation = new Date().getTime()+20*60*1000;
+      sessionStorage.setItem("heureFinReservation",dateEndReservation);
       //fermer formulaire
       document.getElementById("formulaire-inscription").removeChild(form);
       //ouvrir canvas signature
@@ -130,8 +130,10 @@ function addReservation() {
 
 //fonction timer reservation
 function timerReservation() {
-  //variable time de 20 minute
-  let time = 20*60*1000;
+  //variable time calculer à partir de sessionstorage
+  const dateNow = new Date().getTime();
+  const dateReservation = parseInt(sessionStorage.getItem("heureFinReservation"),10)
+  time = (dateReservation-dateNow);
   //function timer
   function timer() {
     time = (time-1000);
@@ -154,6 +156,7 @@ function timerReservation() {
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
     });
+  //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
 };
 
