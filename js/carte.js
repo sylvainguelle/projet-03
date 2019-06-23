@@ -11,6 +11,7 @@ const avBikesStationElt = document.getElementById("nbVeloDispoStation");
 const avStandsStationElt = document.getElementById("nbEmplacementStation");
 const inscriptionButton = document.getElementById("bouton-incription");
 const reservationElt = document.getElementById("reservation");
+const statutStationElt = document.getElementById("statutStation");
 //option de la carte mapbox
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -31,6 +32,7 @@ function appelJCDecaux() {
           stand: item.bike_stands,
           lat: item.position.lat,
           lng: item.position.lng,
+          status: item.status,
         };
         stations.push(marqueursInfos);
       };
@@ -50,6 +52,7 @@ function updateMap() {
       addressStationElt.textContent = currentMarker.options.station.address;
       avBikesStationElt.textContent = currentMarker.options.station.bike;
       avStandsStationElt.textContent = currentMarker.options.station.stand;
+      statutStationElt.textContent = currentMarker.options.station.status;
     });
     //verification position station par rapport limite de la carte affiché
     if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
@@ -187,19 +190,25 @@ mymap.on("moveend",function (){
 inscriptionButton.addEventListener("click",function(){
   //verifier qu'une station est bien selectionnée
   if (nameStationElt.textContent.length>0) {
+    //verifier que la station est ouverte
+    if (statutStationElt.textContent === "OPEN") {
     //verifier si velo dispo >0
     if (Number(avBikesStationElt.textContent)>0) {
       //afficher formulaire
       AddInscriptionForm();
-    }
-    else {
+    } else {
       document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
       setTimeout(function() {
         document.getElementById("bouton-inscription-info").textContent = "";
       },5000);
     }
+  } else {
+    document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
+    setTimeout(function() {
+      document.getElementById("bouton-inscription-info").textContent = "";
+    },5000);
   }
-  else {
+  } else {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
