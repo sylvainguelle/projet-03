@@ -151,6 +151,7 @@ function timerReservation() {
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
       alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+      sessionStorage.clear();
     };
   };
     inscriptionButton.addEventListener("click",function(){
@@ -159,6 +160,7 @@ function timerReservation() {
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
       alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+      sessionStorage.clear();
     });
   //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
