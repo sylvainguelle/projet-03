@@ -67,62 +67,61 @@ function updateMap() {
 
 //fonction formulaire inscription
 function AddInscriptionForm() {
-  //Condition pour ne pas afficher plusieur fois le formulaire
-  if((!document.getElementById("form-button")) && (!document.querySelector("canvas"))){
-    const formBr = document.createElement("br");
-    const formNom = document.createElement("input");
-    formNom.type = "text";
-    formNom.name = "nom";
-    formNom.required = true;
-    const formPrenom = document.createElement("input");
-    formPrenom.type = "text";
-    formPrenom.name = "prenom";
-    formPrenom.required = true;
-    //verifier si nom prenom sont stocker et les afficher
-    if (localStorage.getItem("nom")==null) {
-      formNom.defaultValue = "Nom";
-    }
-    else {
-      formNom.defaultValue = localStorage.getItem("nom");
-    }
-    if (localStorage.getItem("prenom")==null) {
-      formPrenom.defaultValue = "Prénom";
-    }
-    else {
-      formPrenom.defaultValue = localStorage.getItem("prenom");
-    }
-    const formButton = document.createElement("button");
-    formButton.textContent = "Valider la réservation";
-    formButton.classList.add("btn","btn-success");
-    formButton.id = "form-button";
-    const form = document.createElement("form");
-    form.appendChild(formNom);
-    form.appendChild(formPrenom);
-    form.appendChild(formBr);
-    form.appendChild(formButton);
-    document.getElementById("formulaire-inscription").appendChild(form);
-    //evenement validation formulaire
-    formButton.addEventListener("click", function (e){
-      //stocker données formulaire avec local storage
-      localStorage.setItem("nom",form[0].value) ;
-      localStorage.setItem("prenom",form[1].value);
-      //stocker données de reservation avec sessionstorage
-      sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
-      sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
-      //obtenir heure de fin de reservation et la stocker avec sessionstorage
-      const dateEndReservation = new Date().getTime()+20*60*1000;
-      sessionStorage.setItem("heureFinReservation",dateEndReservation);
-      //fermer formulaire
-      document.getElementById("formulaire-inscription").removeChild(form);
-      //ouvrir canvas signature
-      canvas();
-      e.preventDefault();
-    });
-  };
+  inscriptionButton.style.display = "none";
+  const formBr = document.createElement("br");
+  const formNom = document.createElement("input");
+  formNom.type = "text";
+  formNom.name = "nom";
+  formNom.required = true;
+  const formPrenom = document.createElement("input");
+  formPrenom.type = "text";
+  formPrenom.name = "prenom";
+  formPrenom.required = true;
+  //verifier si nom prenom sont stocker et les afficher
+  if (localStorage.getItem("nom")==null) {
+    formNom.defaultValue = "Nom";
+  }
+  else {
+    formNom.defaultValue = localStorage.getItem("nom");
+  }
+  if (localStorage.getItem("prenom")==null) {
+    formPrenom.defaultValue = "Prénom";
+  }
+  else {
+    formPrenom.defaultValue = localStorage.getItem("prenom");
+  }
+  const formButton = document.createElement("button");
+  formButton.textContent = "Valider la réservation";
+  formButton.classList.add("btn","btn-success");
+  formButton.id = "form-button";
+  const form = document.createElement("form");
+  form.appendChild(formNom);
+  form.appendChild(formPrenom);
+  form.appendChild(formBr);
+  form.appendChild(formButton);
+  document.getElementById("formulaire-inscription").appendChild(form);
+  //evenement validation formulaire
+  formButton.addEventListener("click", function (e){
+    //stocker données formulaire avec local storage
+    localStorage.setItem("nom",form[0].value) ;
+    localStorage.setItem("prenom",form[1].value);
+    //stocker données de reservation avec sessionstorage
+    sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
+    sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
+    //obtenir heure de fin de reservation et la stocker avec sessionstorage
+    const dateEndReservation = new Date().getTime()+20*60*1000;
+    sessionStorage.setItem("heureFinReservation",dateEndReservation);
+    //fermer formulaire
+    document.getElementById("formulaire-inscription").removeChild(form);
+    //ouvrir canvas signature
+    canvas();
+    e.preventDefault();
+  });
 };
 
 //fonction mise à jour div reservation
 function addReservation() {
+  inscriptionButton.style.display = "block";
   document.getElementById("reservation").textContent =
   "Vous avez réservé un velo à la station "+
   sessionStorage.getItem("stationReserve")+", "+
