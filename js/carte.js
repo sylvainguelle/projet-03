@@ -111,8 +111,6 @@ function AddInscriptionForm() {
   formButton.addEventListener("click", function (e){
     const champA = formNom.value;
     const champB = formPrenom.value;
-    console.log("a"+champA+"+"+champB);
-    console.log(champA.length+"+"+champB.length);
     if (formNom.value.length===0||formPrenom.value.length===0) {
       alert("Veuillez remplir le nom et le prénom")
     } else {
@@ -141,6 +139,8 @@ function addReservation() {
   "Vous avez réservé un velo à la station "+
   sessionStorage.getItem("stationReserve")+", "+
   sessionStorage.getItem("adresseReserve");
+  const majNombreVelo = parseInt(avBikesStationElt.textContent,10)-1;
+  avBikesStationElt.textContent = majNombreVelo;
   timerReservation();
   document.getElementById("bouton-inscription-info").textContent = "la réservation d'un nouveau velo annulera la réservation en cours";
 };
