@@ -4,7 +4,6 @@ const calqueMarqueur = L.layerGroup().addTo(mymap); // creation calque pour affi
 const url = "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058";
 let stations = [];// inialisation tableau des stations
 let time = 0; //variable pour le timer de reservation
-let reservationEnCours = false; //variable pour bloquer le changement de station quand une reservation est en cours
 //element dom à mettre à jour
 const nameStationElt = document.getElementById("nomStation");
 const addressStationElt = document.getElementById("adresseStation");
@@ -48,14 +47,12 @@ function updateMap() {
     const marqueur = L.marker([stations[i].lat,stations[i].lng]);
     marqueur.options.station = stations[i];
     marqueur.on("click", function (e){
-      if (reservationEnCours===false) {
-        const currentMarker = e.target;
-        nameStationElt.textContent = currentMarker.options.station.name;
-        addressStationElt.textContent = currentMarker.options.station.address;
-        avBikesStationElt.textContent = currentMarker.options.station.bike;
-        avStandsStationElt.textContent = currentMarker.options.station.stand;
-        statutStationElt.textContent = currentMarker.options.station.status;
-      };
+      const currentMarker = e.target;
+      nameStationElt.textContent = currentMarker.options.station.name;
+      addressStationElt.textContent = currentMarker.options.station.address;
+      avBikesStationElt.textContent = currentMarker.options.station.bike;
+      avStandsStationElt.textContent = currentMarker.options.station.stand;
+      statutStationElt.textContent = currentMarker.options.station.status;
     });
     //verification position station par rapport limite de la carte affiché
     if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
@@ -112,17 +109,15 @@ function AddInscriptionForm() {
   document.getElementById("formulaire-inscription").appendChild(form);
   //evenement validation formulaire
   formButton.addEventListener("click", function (e){
-    const champA = formNom.value;
-    const champB = formPrenom.value;
     if (formNom.value.length===0||formPrenom.value.length===0) {
       alert("Veuillez remplir le nom et le prénom")
     } else {
-      //stocker données formulaire avec local storage
-      localStorage.setItem("nom",form[0].value) ;
-      localStorage.setItem("prenom",form[1].value);
       //stocker données de reservation avec sessionstorage
       sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
       sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
+      //stocker données formulaire avec local storage
+      localStorage.setItem("nom",form[0].value) ;
+      localStorage.setItem("prenom",form[1].value);
       //fermer formulaire
       document.getElementById("formulaire-inscription").removeChild(form);
       //ouvrir canvas signature
@@ -134,7 +129,6 @@ function AddInscriptionForm() {
 
 //fonction mise à jour div reservation
 function addReservation() {
-  reservationEnCours = false;
   inscriptionButton.style.display = "block";
   document.getElementById("reservation").textContent =
   "Vous avez réservé un velo à la station " +
@@ -160,18 +154,18 @@ function timerReservation() {
     document.getElementById("timer").textContent = "réservation valide pendant : "
     + minute + " minute(s) " + (second<10 ?"0":"") + second + " seconde(s) ";
     //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
-    if (time<0 || reservationEnCours===true) {
+    if (time<0) {
       clearInterval(interval);
       document.getElementById("timer").textContent = "";
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
       alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
       sessionStorage.clear();
+      reservationEnCours = false;
     };
   };
   //evenement au clic par l'utilisateur pour arreter la reservation
   inscriptionButton.addEventListener("click",function(){
-    reservationEnCours = true;
   });
   //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
@@ -201,6 +195,7 @@ mymap.on("moveend",function (){
 
 //evenement clic sur le bouton d'incription
 inscriptionButton.addEventListener("click",function () {
+  time = 0;
   if (nameStationElt.textContent.length === 0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {
@@ -218,7 +213,6 @@ inscriptionButton.addEventListener("click",function () {
     },5000);
   } else {
     //afficher formulaire
-    reservationEnCours = true;
     AddInscriptionForm();
   };
 });
