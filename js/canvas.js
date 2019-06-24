@@ -23,6 +23,9 @@ function canvas() {
 		} else {
 			document.getElementById("formulaire-inscription").removeChild(canvas);
 			document.getElementById("formulaire-inscription").removeChild(canvasButton);
+			//obtenir heure de fin de reservation et la stocker avec sessionstorage
+      const dateEndReservation = new Date().getTime()+20*60*1000;
+      sessionStorage.setItem("heureFinReservation",dateEndReservation);
     	addReservation();
 		}
 	});

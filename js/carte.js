@@ -123,9 +123,6 @@ function AddInscriptionForm() {
       //stocker données de reservation avec sessionstorage
       sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
       sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
-      //obtenir heure de fin de reservation et la stocker avec sessionstorage
-      const dateEndReservation = new Date().getTime()+20*60*1000;
-      sessionStorage.setItem("heureFinReservation",dateEndReservation);
       //fermer formulaire
       document.getElementById("formulaire-inscription").removeChild(form);
       //ouvrir canvas signature
@@ -162,22 +159,18 @@ function timerReservation() {
     const second = ((time%60000)/1000).toFixed(0);
     document.getElementById("timer").textContent = "réservation valide pendant : "
     +minute+" minute(s) "+(second<10 ?"0":"")+second+" seconde(s) ";
-    if (time<0) {
+    //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
+    if (time<0 || reservationEnCours===true) {
       clearInterval(interval);
       document.getElementById("timer").textContent = "";
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
-      alert("if Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
       sessionStorage.clear();
     };
   };
   inscriptionButton.addEventListener("click",function(){
-    clearInterval(interval);
-    document.getElementById("timer").textContent = "";
-    document.getElementById("reservation").textContent = "Pas de réservation en cours";
-    document.getElementById("bouton-inscription-info").textContent = "";
-    alert("event Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
-    sessionStorage.clear();
+    reservationEnCours = true;
   });
   //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
