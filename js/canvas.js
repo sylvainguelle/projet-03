@@ -19,7 +19,7 @@ function canvas() {
 	//validation de la signature au clic
 	canvasButton.addEventListener("click", function () {
 		if (signatureOk===false) {
-			alert("Veuillez signer dans le champ de signature")
+			alert("Veuillez signer dans le champ de signature");
 		} else {
 			document.getElementById("formulaire-inscription").removeChild(canvas);
 			document.getElementById("formulaire-inscription").removeChild(canvasButton);
@@ -27,7 +27,7 @@ function canvas() {
       const dateEndReservation = new Date().getTime()+20*60*1000;
       sessionStorage.setItem("heureFinReservation",dateEndReservation);
     	addReservation();
-		}
+		};
 	});
 
 	//variable de tracking de position

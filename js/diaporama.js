@@ -12,8 +12,8 @@ currentImg.style.display = "block";//affiche l'image courrante
 function imgDisplayNone() {
   for (i=0;i<imgCarousel.length;i++) {
     imgCarousel[i].style.display = "none";//masque toute les img
-  }
-}
+  };
+};
 
 //fonction slide suivant
 function nextSlide(){
@@ -22,10 +22,9 @@ function nextSlide(){
       imgDisplayNone();//masque
       currentImg = imgCarousel[currentSlide];//nouvelle img courante
       currentImg.style.display = "block";//affiche nouvelle img courante
-    }
-    else{// si i est passer à une valeur sup aux nb d'img
+    } else {// si i est passer à une valeur sup aux nb d'img
       currentSlide = indexImg;
-    }
+    };
 };
 
 //fonction slide precedent
@@ -35,10 +34,9 @@ function prevSlide(){
     imgDisplayNone();
     currentImg = imgCarousel[currentSlide];
     currentImg.style.display = "block";
-  }
-  else{
+  } else {
     currentSlide = 0;
-  }
+  };
 };
 
 //fonction slide automatique des image
@@ -47,15 +45,14 @@ function slideImg() {
     if (pause==false) {
       if(currentSlide<indexImg){//condition si inferieur à la derniere image
           currentSlide++;
-      }
-      else {//sinon reset de i
+      } else {//sinon reset de i
           currentSlide=0;
-      }
-      imgDisplayNone();//masque
-      currentImg=imgCarousel[currentSlide];//nouvelle img courante
-      currentImg.style.display = "block";//affiche nouvelle img courante
+      };
+    imgDisplayNone();//masque
+    currentImg=imgCarousel[currentSlide];//nouvelle img courante
+    currentImg.style.display = "block";//affiche nouvelle img courante
     };
-    },5000);
+  },5000);
 };
 
 slideImg();//premier lancement de la fonction de slide automatique
