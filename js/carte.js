@@ -69,7 +69,7 @@ function updateMap() {
 function AddInscriptionForm() {
   inscriptionButton.style.display = "none";//masque le bouton de reservation
   //ajout du formulaire
-  const formBr = document.createElement("br");
+  /*const formBr = document.createElement("br");*/
   const formNom = document.createElement("input");
   formNom.type = "text";
   formNom.required = true;
@@ -104,7 +104,7 @@ function AddInscriptionForm() {
   form.appendChild(formNom);
   form.appendChild(labelPrenom);
   form.appendChild(formPrenom);
-  form.appendChild(formBr);
+  /*form.appendChild(formBr);*/
   form.appendChild(formButton);
   document.getElementById("formulaire-inscription").appendChild(form);
   //evenement validation formulaire
@@ -195,7 +195,7 @@ mymap.on("moveend",function (){
 
 //evenement clic sur le bouton d'incription
 inscriptionButton.addEventListener("click",function () {
-  time = 0;
+  time = 0;//repasse time à 0 pour annuler une resarvation existante
   if (nameStationElt.textContent.length === 0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {

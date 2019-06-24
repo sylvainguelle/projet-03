@@ -1,5 +1,7 @@
 function canvas() {
 	//creation et definition du canvas
+	const divCanvas = document.createElement("div")
+	divCanvas.id = "div-canvas"
 	const canvas = document.createElement("canvas");
 	canvas.height = 200;
 	canvas.width = 300;
@@ -9,20 +11,21 @@ function canvas() {
 	const ctx = canvas.getContext("2d");
 	let signatureOk = false;
 	//insertion du canvas sur la page et du bouton validation canvas
-	document.getElementById("formulaire-inscription").appendChild(canvas);
+	divCanvas.appendChild(canvas);
 	const canvasButton = document.createElement('button');
 	canvasButton.classList.add("btn","btn-success");
 	canvasButton.textContent = "Valider la signature";
-  document.getElementById("formulaire-inscription").appendChild(document.createElement("br"));
-  document.getElementById("formulaire-inscription").appendChild(canvasButton);
+  divCanvas.appendChild(document.createElement("br"));
+  divCanvas.appendChild(canvasButton);
+	document.getElementById("formulaire-inscription").appendChild(divCanvas);
+
 
 	//validation de la signature au clic
 	canvasButton.addEventListener("click", function () {
 		if (signatureOk===false) {
 			alert("Veuillez signer dans le champ de signature");
 		} else {
-			document.getElementById("formulaire-inscription").removeChild(canvas);
-			document.getElementById("formulaire-inscription").removeChild(canvasButton);
+			document.getElementById("formulaire-inscription").removeChild(divCanvas);
 			//obtenir heure de fin de reservation et la stocker avec sessionstorage
       const dateEndReservation = new Date().getTime()+20*60*1000;
       sessionStorage.setItem("heureFinReservation",dateEndReservation);
