@@ -13,6 +13,7 @@ function canvas() {
 	//insertion du canvas sur la page et du bouton validation canvas
 	divCanvas.appendChild(canvas);
 	const canvasButton = document.createElement('button');
+	canvasButton.id = "canvas-button";
 	canvasButton.classList.add("btn","btn-success");
 	canvasButton.textContent = "Valider la signature";
   divCanvas.appendChild(document.createElement("br"));

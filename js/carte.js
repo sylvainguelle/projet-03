@@ -47,12 +47,17 @@ function updateMap() {
     const marqueur = L.marker([stations[i].lat,stations[i].lng]);
     marqueur.options.station = stations[i];
     marqueur.on("click", function (e){
-      const currentMarker = e.target;
-      nameStationElt.textContent = currentMarker.options.station.name;
-      addressStationElt.textContent = currentMarker.options.station.address;
-      avBikesStationElt.textContent = currentMarker.options.station.bike;
-      avStandsStationElt.textContent = currentMarker.options.station.stand;
-      statutStationElt.textContent = currentMarker.options.station.status;
+      if (document.getElementById("form-button") === null &
+      document.getElementById("canvas-button") === null) {
+        const currentMarker = e.target;
+        nameStationElt.textContent = currentMarker.options.station.name;
+        addressStationElt.textContent = currentMarker.options.station.address;
+        avBikesStationElt.textContent = currentMarker.options.station.bike;
+        avStandsStationElt.textContent = currentMarker.options.station.stand;
+        statutStationElt.textContent = currentMarker.options.station.status;
+      } else {
+        alert("Vous ne pouvez pas modifier la station lors d'un réservation")
+      };
     });
     //verification position station par rapport limite de la carte affiché
     if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
@@ -174,7 +179,7 @@ function timerReservation() {
 //fonction de verification si une reservation existe pendant la session
 function verificationReservation() {
   if (sessionStorage.getItem("stationReserve") != null){
-    if (confirm("Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve"))){
+    if (confirm("Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve")+" ?")){
       addReservation();
     } else {
       sessionStorage.clear();
