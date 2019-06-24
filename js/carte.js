@@ -160,7 +160,6 @@ function timerReservation() {
     time = (time-1000);
     const minute = Math.floor(time / 60000);
     const second = ((time%60000)/1000).toFixed(0);
-    //console.log(minute+":"+(second<10 ?'0':'')+second);
     document.getElementById("timer").textContent = "réservation valide pendant : "
     +minute+" minute(s) "+(second<10 ?"0":"")+second+" seconde(s) ";
     if (time<0) {
@@ -168,18 +167,18 @@ function timerReservation() {
       document.getElementById("timer").textContent = "";
       document.getElementById("reservation").textContent = "Pas de réservation en cours";
       document.getElementById("bouton-inscription-info").textContent = "";
-      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+      alert("if Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
       sessionStorage.clear();
     };
   };
-    inscriptionButton.addEventListener("click",function(){
-      clearInterval(interval);
-      document.getElementById("timer").textContent = "";
-      document.getElementById("reservation").textContent = "Pas de réservation en cours";
-      document.getElementById("bouton-inscription-info").textContent = "";
-      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
-      sessionStorage.clear();
-    });
+  inscriptionButton.addEventListener("click",function(){
+    clearInterval(interval);
+    document.getElementById("timer").textContent = "";
+    document.getElementById("reservation").textContent = "Pas de réservation en cours";
+    document.getElementById("bouton-inscription-info").textContent = "";
+    alert("event Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+    sessionStorage.clear();
+  });
   //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
 };
@@ -207,32 +206,25 @@ mymap.on("moveend",function (){
 });
 
 //evenement clic sur le bouton d'incription
-inscriptionButton.addEventListener("click",function(){
-  //verifier qu'une station est bien selectionnée
-  if (nameStationElt.textContent.length>0) {
-    //verifier que la station est ouverte
-    if (statutStationElt.textContent === "OPEN") {
-    //verifier si velo dispo >0
-    if (Number(avBikesStationElt.textContent)>0) {
-      //afficher formulaire
-      reservationEnCours = true;
-      AddInscriptionForm();
-    } else {
-      document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
-      setTimeout(function() {
-        document.getElementById("bouton-inscription-info").textContent = "";
-      },5000);
-    }
-  } else {
-    document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
-    setTimeout(function() {
-      document.getElementById("bouton-inscription-info").textContent = "";
-    },5000);
-  }
-  } else {
+inscriptionButton.addEventListener("click",function () {
+  if (nameStationElt.textContent.length===0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
     },5000);
+  } else if (Number(avBikesStationElt.textContent)===0) {
+    document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
+    setTimeout(function() {
+      document.getElementById("bouton-inscription-info").textContent = "";
+    },5000);
+  } else if (statutStationElt.textContent === "CLOSED") {
+    document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
+    setTimeout(function() {
+      document.getElementById("bouton-inscription-info").textContent = "";
+    },5000);
+  } else {
+    //afficher formulaire
+    reservationEnCours = true;
+    AddInscriptionForm();
   }
-});
+})
