@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-   crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
       integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
       crossorigin=""></script>
@@ -33,41 +33,36 @@
           <button type="button" name="next" class="btn btn-info" id="next"><i class="fas fa-caret-right"></i></button>
         </div>
       </div>
-
-
       <div id="affichage-carte" class="row">
-          <div class="carte-velo col-md-12 col-lg-6">
-            <div id="carte"></div>
-          </div>
-          <div class="col-md-12 col-lg-6">
-            <div class="detail-station">
-              <h2>Détails de la station</h2>
-              <h3>Nom de la station</h3>
-              <p id="nomStation"></p>
-              <h3>Adresse</h3>
-              <p id="adresseStation"></p>
-              <h3>Nombre de vélo disponible</h3>
-              <p id="nbVeloDispoStation"></p>
-              <h3>Nombre d'emplacement</h3>
-              <p id="nbEmplacementStation"></p>
-              <p id="statutStation"></p>
-              <button id="bouton-incription" class="btn btn-success">Réservation d'un vélo</button>
-              <p id="bouton-inscription-info"></p>
-              <div id="formulaire-inscription"></div>
-            </div>
-          </div>
-
+        <div class="carte-velo col-md-12 col-lg-6">
+          <div id="carte"></div>
         </div>
-
+        <div class="col-md-12 col-lg-6">
+          <div class="detail-station">
+            <h2>Détails de la station</h2>
+            <h3>Nom de la station</h3>
+            <p id="nomStation"></p>
+            <h3>Adresse</h3>
+            <p id="adresseStation"></p>
+            <h3>Nombre de vélo disponible</h3>
+            <p id="nbVeloDispoStation"></p>
+            <h3>Nombre d'emplacement</h3>
+            <p id="nbEmplacementStation"></p>
+            <p id="statutStation"></p>
+            <button id="bouton-incription" class="btn btn-success">Réservation d'un vélo</button>
+            <p id="bouton-inscription-info"></p>
+            <div id="formulaire-inscription"></div>
+          </div>
+        </div>
+      </div>
       <div class="div-reservation col-lg-12">
         <p id="timer"></p>
         <p id="reservation">Pas de réservation en cours</p>
       </div>
-      <!--<script src="./js/jquery-3.4.1.min.js"></script>-->
-      <script src="./js/ajax.js"></script>
-      <script src="./js/canvas.js"></script>
-      <script src="./js/diaporama.js"></script>
-      <script src="./js/carte.js"></script>
     </div>
+    <script src="./js/ajax.js"></script>
+    <script src="./js/canvas.js"></script>
+    <script src="./js/diaporama.js"></script>
+    <script src="./js/carte.js"></script>
   </body>
 </html>
