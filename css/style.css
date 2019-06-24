@@ -88,41 +88,41 @@ li {
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) and (max-width: 767.98px) {
-#diaporama{
-  width: 560px;
-  height: 281px;
-}
-#carte {
-  height: 300px ;
-}
+  #diaporama{
+    width: 560px;
+    height: 281px;
+  }
+  #carte {
+    height: 300px ;
+  }
 }
 
 /* Medium devices (tablets, 768px and up)*/
 @media (min-width: 768px) and (max-width: 991.98px) {
-#diaporama{
-  width: 738px;
-  height: 370px;
-}
-#carte {
-  height: 400px ;
-}
+  #diaporama{
+    width: 738px;
+    height: 370px;
+  }
+  #carte {
+    height: 400px ;
+  }
 }
 
 /* Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) and (max-width: 1199.98px) {
-#diaporama{
-  width: 1000px;
-  height: 501px;
-}
-#carte {
-  height: 400px ;
-}
+  #diaporama{
+    width: 1000px;
+    height: 501px;
+  }
+  #carte {
+    height: 400px ;
+  }
 }
 
 /* Extra large devices (large desktops, 1200px and up)*/
 @media (min-width: 1200px) {
-#diaporama{
-  width: 1200px;
-  height: 544px;
-}
+  #diaporama{
+    width: 1200px;
+    height: 544px;
+  }
 }
