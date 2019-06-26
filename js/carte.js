@@ -29,21 +29,24 @@ class Map {
 
   //function requete vers api JCDecaux et maj tableau stations
   appelJCDecaux() {
-    ajaxGet(this.url, function (reponse) { //
-        let reponseElt = JSON.parse(reponse);
-        for (const item of reponseElt) {
-          const marqueursInfos = {
-            name: item.name,
-            address: item.address,
-            bike: item.available_bikes,
-            stand: item.bike_stands,
-            lat: item.position.lat,
-            lng: item.position.lng,
-            status: item.status,
-          };
-          this.stations.push(marqueursInfos);
+    console.log(this.stations);
+    ajaxGet(this.url, function (reponse) {
+      console.log(this.stations);
+      let reponseElt = JSON.parse(reponse);
+      for (const item of reponseElt) {
+        console.log(this.stations);
+        const marqueursInfos = {
+          name: item.name,
+          address: item.address,
+          bike: item.available_bikes,
+          stand: item.bike_stands,
+          lat: item.position.lat,
+          lng: item.position.lng,
+          status: item.status,
         };
-        updateMap();
+        this.stations.push(marqueursInfos);
+      };
+      this.updateMap();
     });
   };
 
@@ -198,7 +201,7 @@ mapLyon.verificationReservation();
 
 //evenement MAJ des marqueurs à la fin d'un deplacement de la carte
 mapLyon.mymap.on("moveend",function (){
-  updateMap();
+  mapLyon.updateMap();
 });
 
 //evenement clic sur le bouton d'incription
@@ -221,6 +224,6 @@ mapLyon.inscriptionButton.addEventListener("click",function () {
     },5000);
   } else {
     //afficher formulaire
-    AddInscriptionForm();
+    mapLyon.AddInscriptionForm();
   };
 });
