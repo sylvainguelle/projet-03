@@ -42,7 +42,7 @@ function prevSlide(){
 //fonction slide automatique des image
 function slideImg() {
   const timer = setInterval(function(){
-    if (pause==false) {
+    if (pause === false) {
       if(currentSlide<indexImg){//condition si inferieur à la derniere image
           currentSlide++;
       } else {//sinon reset de i

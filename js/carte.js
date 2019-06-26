@@ -1,9 +1,19 @@
 //declaration variable
 const mymap = L.map("carte").setView([45.760033,4.838189],15);//inialisation carte avec centre et zoom
 const calqueMarqueur = L.layerGroup().addTo(mymap); // creation calque pour affichage des marqueurs
+//option de la carte mapbox
+L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: "mapbox.streets",
+    accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJjandodnUwbzEwZGx3NDJtano3ZHY3MHlhIn0.zglA2Ncbo2bLKAnY55hK7g"
+}).addTo(mymap);
+
 const url = "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058";
+
 let stations = [];// inialisation tableau des stations
 let time = 0; //variable pour le timer de reservation
+
 //element dom à mettre à jour
 const nameStationElt = document.getElementById("nomStation");
 const addressStationElt = document.getElementById("adresseStation");
@@ -12,13 +22,7 @@ const avStandsStationElt = document.getElementById("nbEmplacementStation");
 const inscriptionButton = document.getElementById("bouton-incription");
 const reservationElt = document.getElementById("reservation");
 const statutStationElt = document.getElementById("statutStation");
-//option de la carte mapbox
-L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: "mapbox.streets",
-    accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJjandodnUwbzEwZGx3NDJtano3ZHY3MHlhIn0.zglA2Ncbo2bLKAnY55hK7g"
-}).addTo(mymap);
+
 
 //function requete vers api JCDecaux et maj tableau stations
 function appelJCDecaux() {
@@ -166,12 +170,12 @@ function timerReservation() {
       document.getElementById("bouton-inscription-info").textContent = "";
       alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
       sessionStorage.clear();
-      reservationEnCours = false;
+      /*reservationEnCours = false;*/
     };
   };
   //evenement au clic par l'utilisateur pour arreter la reservation
-  inscriptionButton.addEventListener("click",function(){
-  });
+  /*inscriptionButton.addEventListener("click",function(){
+  });*/
   //lancement timer avec intervalle 1 secondes
   const interval = setInterval(timer, 1000);
 };
@@ -200,7 +204,7 @@ mymap.on("moveend",function (){
 
 //evenement clic sur le bouton d'incription
 inscriptionButton.addEventListener("click",function () {
-  time = 0;//repasse time à 0 pour annuler une resarvation existante
+  time = 0;//repasse time à 0 pour annuler une reservation existante
   if (nameStationElt.textContent.length === 0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {
