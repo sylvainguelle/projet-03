@@ -1,209 +1,215 @@
-//declaration variable
-const mymap = L.map("carte").setView([45.760033,4.838189],15);//inialisation carte avec centre et zoom
-const calqueMarqueur = L.layerGroup().addTo(mymap); // creation calque pour affichage des marqueurs
-//option de la carte mapbox
-L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: "mapbox.streets",
-    accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJjandodnUwbzEwZGx3NDJtano3ZHY3MHlhIn0.zglA2Ncbo2bLKAnY55hK7g"
-}).addTo(mymap);
+class Map {
+  constructor (urlContract,latContract,lngContract,zoom) {
+    //declaration variable
+    this.mymap = L.map("carte").setView([latContract,lngContract],zoom);//inialisation carte avec centre et zoom
+    this.calqueMarqueur = L.layerGroup().addTo(this.mymap); // creation calque pour affichage des marqueurs
+    //option de la carte mapbox
+    L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: "mapbox.streets",
+        accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJjandodnUwbzEwZGx3NDJtano3ZHY3MHlhIn0.zglA2Ncbo2bLKAnY55hK7g"
+    }).addTo(this.mymap);
 
-const url = "https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058";
+    this.url = urlContract;
 
-let stations = [];// inialisation tableau des stations
-let time = 0; //variable pour le timer de reservation
+    this.stations = [];// inialisation tableau des stations
+    this.time = 0; //variable pour le timer de reservation
 
-//element dom à mettre à jour
-const nameStationElt = document.getElementById("nomStation");
-const addressStationElt = document.getElementById("adresseStation");
-const avBikesStationElt = document.getElementById("nbVeloDispoStation");
-const avStandsStationElt = document.getElementById("nbEmplacementStation");
-const inscriptionButton = document.getElementById("bouton-incription");
-const reservationElt = document.getElementById("reservation");
-const statutStationElt = document.getElementById("statutStation");
+    //element dom à mettre à jour
+    this.nameStationElt = document.getElementById("nomStation");
+    this.addressStationElt = document.getElementById("adresseStation");
+    this.avBikesStationElt = document.getElementById("nbVeloDispoStation");
+    this.avStandsStationElt = document.getElementById("nbEmplacementStation");
+    this.inscriptionButton = document.getElementById("bouton-incription");
+    this.reservationElt = document.getElementById("reservation");
+    this.statutStationElt = document.getElementById("statutStation");
+  };
 
 
-//function requete vers api JCDecaux et maj tableau stations
-function appelJCDecaux() {
-  ajaxGet(url, function (reponse) { //
-      let reponseElt = JSON.parse(reponse);
-      for (const item of reponseElt) {
-        const marqueursInfos = {
-          name: item.name,
-          address: item.address,
-          bike: item.available_bikes,
-          stand: item.bike_stands,
-          lat: item.position.lat,
-          lng: item.position.lng,
-          status: item.status,
+  //function requete vers api JCDecaux et maj tableau stations
+  appelJCDecaux() {
+    ajaxGet(this.url, function (reponse) { //
+        let reponseElt = JSON.parse(reponse);
+        for (const item of reponseElt) {
+          const marqueursInfos = {
+            name: item.name,
+            address: item.address,
+            bike: item.available_bikes,
+            stand: item.bike_stands,
+            lat: item.position.lat,
+            lng: item.position.lng,
+            status: item.status,
+          };
+          stations.push(marqueursInfos);
         };
-        stations.push(marqueursInfos);
-      };
-      updateMap();
-  });
-};
-
-//fonction ajout ou maj des marqueurs sur la carte
-function updateMap() {
-  calqueMarqueur.clearLayers();//effacer marqueurs
-  for (let i = 0; i < stations.length; i++) {
-    const marqueur = L.marker([stations[i].lat,stations[i].lng]);
-    marqueur.options.station = stations[i];
-    marqueur.on("click", function (e){
-      if (document.getElementById("form-button") === null &
-      document.getElementById("canvas-button") === null) {
-        const currentMarker = e.target;
-        nameStationElt.textContent = currentMarker.options.station.name;
-        addressStationElt.textContent = currentMarker.options.station.address;
-        avBikesStationElt.textContent = currentMarker.options.station.bike;
-        avStandsStationElt.textContent = currentMarker.options.station.stand;
-        statutStationElt.textContent = currentMarker.options.station.status;
-      } else {
-        alert("Vous ne pouvez pas modifier la station lors d'un réservation")
-      };
+        updateMap();
     });
-    //verification position station par rapport limite de la carte affiché
-    if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
-    (stations[i].lat>mymap.getBounds()._southWest.lat)&&
-    (stations[i].lng<mymap.getBounds()._northEast.lng)&&
-    (stations[i].lng>mymap.getBounds()._southWest.lng)) {
-      //generer marqueur
-      marqueur.addTo(calqueMarqueur);
+  };
+
+  //fonction ajout ou maj des marqueurs sur la carte
+  updateMap() {
+    calqueMarqueur.clearLayers();//effacer marqueurs
+    for (let i = 0; i < stations.length; i++) {
+      const marqueur = L.marker([stations[i].lat,stations[i].lng]);
+      marqueur.options.station = stations[i];
+      marqueur.on("click", function (e){
+        if (document.getElementById("form-button") === null &
+        document.getElementById("canvas-button") === null) {
+          const currentMarker = e.target;
+          nameStationElt.textContent = currentMarker.options.station.name;
+          addressStationElt.textContent = currentMarker.options.station.address;
+          avBikesStationElt.textContent = currentMarker.options.station.bike;
+          avStandsStationElt.textContent = currentMarker.options.station.stand;
+          statutStationElt.textContent = currentMarker.options.station.status;
+        } else {
+          alert("Vous ne pouvez pas modifier la station lors d'un réservation")
+        };
+      });
+      //verification position station par rapport limite de la carte affiché
+      if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
+      (stations[i].lat>mymap.getBounds()._southWest.lat)&&
+      (stations[i].lng<mymap.getBounds()._northEast.lng)&&
+      (stations[i].lng>mymap.getBounds()._southWest.lng)) {
+        //generer marqueur
+        marqueur.addTo(calqueMarqueur);
+      };
     };
   };
-};
 
-//fonction formulaire inscription
-function AddInscriptionForm() {
-  inscriptionButton.style.display = "none";//masque le bouton de reservation
-  //ajout du formulaire
-  /*const formBr = document.createElement("br");*/
-  const formNom = document.createElement("input");
-  formNom.type = "text";
-  formNom.required = true;
-  formNom.id = "nom-formulaire";
-  const labelNom = document.createElement("label");
-  labelNom.htmlFor = "nom-formulaire";
-  labelNom.textContent = "Nom:";
-  const formPrenom = document.createElement("input");
-  formPrenom.type = "text";
-  formPrenom.id = "prenom-formulaire";
-  formPrenom.required = true;
-  const labelPrenom = document.createElement("label");
-  labelPrenom.htmlFor = "prenom-formulaire";
-  labelPrenom.textContent = "Prénom:";
-  //verifier si nom prenom sont stocké
-  if (localStorage.getItem("nom")==null) {
-    formNom.defaultValue = "";
-  } else {
-    formNom.defaultValue = localStorage.getItem("nom");
-  };
-  if (localStorage.getItem("prenom")==null) {
-    formPrenom.defaultValue = "";
-  } else {
-    formPrenom.defaultValue = localStorage.getItem("prenom");
-  };
-  const formButton = document.createElement("button");
-  formButton.textContent = "Valider la réservation";
-  formButton.classList.add("btn","btn-success");
-  formButton.id = "form-button";
-  const form = document.createElement("form");
-  form.appendChild(labelNom);
-  form.appendChild(formNom);
-  form.appendChild(labelPrenom);
-  form.appendChild(formPrenom);
-  /*form.appendChild(formBr);*/
-  form.appendChild(formButton);
-  document.getElementById("formulaire-inscription").appendChild(form);
-  //evenement validation formulaire
-  formButton.addEventListener("click", function (e){
-    if (formNom.value.length===0||formPrenom.value.length===0) {
-      alert("Veuillez remplir le nom et le prénom")
+  //fonction formulaire inscription
+  AddInscriptionForm() {
+    inscriptionButton.style.display = "none";//masque le bouton de reservation
+    //ajout du formulaire
+    /*const formBr = document.createElement("br");*/
+    const formNom = document.createElement("input");
+    formNom.type = "text";
+    formNom.required = true;
+    formNom.id = "nom-formulaire";
+    const labelNom = document.createElement("label");
+    labelNom.htmlFor = "nom-formulaire";
+    labelNom.textContent = "Nom:";
+    const formPrenom = document.createElement("input");
+    formPrenom.type = "text";
+    formPrenom.id = "prenom-formulaire";
+    formPrenom.required = true;
+    const labelPrenom = document.createElement("label");
+    labelPrenom.htmlFor = "prenom-formulaire";
+    labelPrenom.textContent = "Prénom:";
+    //verifier si nom prenom sont stocké
+    if (localStorage.getItem("nom")==null) {
+      formNom.defaultValue = "";
     } else {
-      //stocker données de reservation avec sessionstorage
-      sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
-      sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
-      //stocker données formulaire avec local storage
-      localStorage.setItem("nom",form[0].value) ;
-      localStorage.setItem("prenom",form[1].value);
-      //fermer formulaire
-      document.getElementById("formulaire-inscription").removeChild(form);
-      //ouvrir canvas signature
-      canvas();
-      e.preventDefault();
-    }
-  });
-};
-
-//fonction mise à jour div reservation
-function addReservation() {
-  inscriptionButton.style.display = "block";
-  document.getElementById("reservation").textContent =
-  "Vous avez réservé un velo à la station " +
-  sessionStorage.getItem("stationReserve") + ", " +
-  sessionStorage.getItem("adresseReserve");
-  const majNombreVelo = parseInt(avBikesStationElt.textContent,10)-1;
-  avBikesStationElt.textContent = majNombreVelo;
-  timerReservation();
-  document.getElementById("bouton-inscription-info").textContent = "la réservation d'un nouveau velo annulera la réservation en cours";
-};
-
-//fonction timer reservation
-function timerReservation() {
-  //variable time calculer à partir de sessionstorage
-  const dateNow = new Date().getTime();
-  const dateReservation = parseInt(sessionStorage.getItem("heureFinReservation"),10);
-  time = (dateReservation-dateNow);
-  //function timer
-  function timer() {
-    time = (time-1000);
-    const minute = Math.floor(time / 60000);
-    const second = ((time%60000)/1000).toFixed(0);
-    document.getElementById("timer").textContent = "réservation valide pendant : "
-    + minute + " minute(s) " + (second<10 ?"0":"") + second + " seconde(s) ";
-    //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
-    if (time<0) {
-      clearInterval(interval);
-      document.getElementById("timer").textContent = "";
-      document.getElementById("reservation").textContent = "Pas de réservation en cours";
-      document.getElementById("bouton-inscription-info").textContent = "";
-      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
-      sessionStorage.clear();
-      /*reservationEnCours = false;*/
+      formNom.defaultValue = localStorage.getItem("nom");
     };
-  };
-  //evenement au clic par l'utilisateur pour arreter la reservation
-  /*inscriptionButton.addEventListener("click",function(){
-  });*/
-  //lancement timer avec intervalle 1 secondes
-  const interval = setInterval(timer, 1000);
-};
-
-//fonction de verification si une reservation existe pendant la session
-function verificationReservation() {
-  if (sessionStorage.getItem("stationReserve") != null){
-    if (confirm("Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve")+" ?")){
-      addReservation();
+    if (localStorage.getItem("prenom")==null) {
+      formPrenom.defaultValue = "";
     } else {
-      sessionStorage.clear();
+      formPrenom.defaultValue = localStorage.getItem("prenom");
+    };
+    const formButton = document.createElement("button");
+    formButton.textContent = "Valider la réservation";
+    formButton.classList.add("btn","btn-success");
+    formButton.id = "form-button";
+    const form = document.createElement("form");
+    form.appendChild(labelNom);
+    form.appendChild(formNom);
+    form.appendChild(labelPrenom);
+    form.appendChild(formPrenom);
+    /*form.appendChild(formBr);*/
+    form.appendChild(formButton);
+    document.getElementById("formulaire-inscription").appendChild(form);
+    //evenement validation formulaire
+    formButton.addEventListener("click", function (e){
+      if (formNom.value.length===0||formPrenom.value.length===0) {
+        alert("Veuillez remplir le nom et le prénom")
+      } else {
+        //stocker données de reservation avec sessionstorage
+        sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
+        sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
+        //stocker données formulaire avec local storage
+        localStorage.setItem("nom",form[0].value) ;
+        localStorage.setItem("prenom",form[1].value);
+        //fermer formulaire
+        document.getElementById("formulaire-inscription").removeChild(form);
+        //ouvrir canvas signature
+        canvas();
+        e.preventDefault();
+      }
+    });
+  };
+
+  //fonction mise à jour div reservation
+  addReservation() {
+    inscriptionButton.style.display = "block";
+    document.getElementById("reservation").textContent =
+    "Vous avez réservé un velo à la station " +
+    sessionStorage.getItem("stationReserve") + ", " +
+    sessionStorage.getItem("adresseReserve");
+    const majNombreVelo = parseInt(avBikesStationElt.textContent,10)-1;
+    avBikesStationElt.textContent = majNombreVelo;
+    timerReservation();
+    document.getElementById("bouton-inscription-info").textContent = "la réservation d'un nouveau velo annulera la réservation en cours";
+  };
+
+  //fonction timer reservation
+  timerReservation() {
+    //variable time calculer à partir de sessionstorage
+    const dateNow = new Date().getTime();
+    const dateReservation = parseInt(sessionStorage.getItem("heureFinReservation"),10);
+    time = (dateReservation-dateNow);
+    //function timer
+    function timer() {
+      time = (time-1000);
+      const minute = Math.floor(time / 60000);
+      const second = ((time%60000)/1000).toFixed(0);
+      document.getElementById("timer").textContent = "réservation valide pendant : "
+      + minute + " minute(s) " + (second<10 ?"0":"") + second + " seconde(s) ";
+      //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
+      if (time<0) {
+        clearInterval(interval);
+        document.getElementById("timer").textContent = "";
+        document.getElementById("reservation").textContent = "Pas de réservation en cours";
+        document.getElementById("bouton-inscription-info").textContent = "";
+        alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+        sessionStorage.clear();
+        /*reservationEnCours = false;*/
+      };
+    };
+    //evenement au clic par l'utilisateur pour arreter la reservation
+    /*inscriptionButton.addEventListener("click",function(){
+    });*/
+    //lancement timer avec intervalle 1 secondes
+    const interval = setInterval(timer, 1000);
+  };
+
+  //fonction de verification si une reservation existe pendant la session
+  verificationReservation() {
+    if (sessionStorage.getItem("stationReserve") != null){
+      if (confirm("Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve")+" ?")){
+        addReservation();
+      } else {
+        sessionStorage.clear();
+      };
     };
   };
-};
+};//class
 
+const mapLyon = new Map ("https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058",
+45.760033,4.838189,15);
 //lancement de la fonction d'appel
-appelJCDecaux();
+mapLyon.appelJCDecaux();
 
 //lancement de la fonction de verification si reservation en cours pendant la session
-verificationReservation();
+mapLyon.verificationReservation();
 
 //evenement MAJ des marqueurs à la fin d'un deplacement de la carte
-mymap.on("moveend",function (){
+mapLyon.mymap.on("moveend",function (){
   updateMap();
 });
 
 //evenement clic sur le bouton d'incription
-inscriptionButton.addEventListener("click",function () {
+mapLyoninscriptionButton.addEventListener("click",function () {
   time = 0;//repasse time à 0 pour annuler une reservation existante
   if (nameStationElt.textContent.length === 0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";

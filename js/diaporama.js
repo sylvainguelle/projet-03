@@ -1,79 +1,90 @@
-const carousel = document.getElementById("diaporama");// cible la div du diapo
-const imgCarousel = document.getElementById("diaporama").querySelectorAll("img");// cible tableau les img du diapo
-const indexImg = imgCarousel.length - 1;// creation index selon nombre image
-let pause = false;// variable etat bouton pause
-//inialisation du diapo
-let currentSlide = 0;
-currentImg = imgCarousel[currentSlide];//definition de l'image courante = 0
-imgDisplayNone();
-currentImg.style.display = "block";//affiche l'image courrante
-
-//fonction masquer toute les images
-function imgDisplayNone() {
-  for (i=0;i<imgCarousel.length;i++) {
-    imgCarousel[i].style.display = "none";//masque toute les img
-  };
-};
-
-//fonction slide suivant
-function nextSlide(){
-  currentSlide++;//increment de i
-  if( currentSlide <= indexImg ){
-      imgDisplayNone();//masque
-      currentImg = imgCarousel[currentSlide];//nouvelle img courante
-      currentImg.style.display = "block";//affiche nouvelle img courante
-    } else {// si i est passer à une valeur sup aux nb d'img
-      currentSlide = indexImg;
+class Diaporama {
+  constructor (diaporamaId) {
+    this.carousel = document.getElementById(diaporamaId);// cible la div du diapo
+    this.imgCarousel = this.carousel.querySelectorAll("img");// cible tableau les img du diapo
+    this.indexImg = this.imgCarousel.length - 1;// creation index selon nombre image
+    this.pauseState = false;// variable etat bouton pause
+    //inialisation du diapo
+    this.currentSlide = 0;
+    this.currentImg = this.imgCarousel[this.currentSlide];//definition de l'image courante = 0
+    this.imgDisplayNone();
+    this.currentImg.style.display = "block";//affiche l'image courrante
+  }
+  //fonction masquer toute les images
+  imgDisplayNone() {
+    for (let i=0;i < this.imgCarousel.length;i++) {
+      this.imgCarousel[i].style.display = "none";//masque toute les img
     };
-};
-
-//fonction slide precedent
-function prevSlide(){
-  currentSlide--;
-  if( currentSlide >= 0 ){
-    imgDisplayNone();
-    currentImg = imgCarousel[currentSlide];
-    currentImg.style.display = "block";
-  } else {
-    currentSlide = 0;
   };
-};
 
-//fonction slide automatique des image
-function slideImg() {
-  const timer = setInterval(function(){
-    if (pause === false) {
-      if(currentSlide<indexImg){//condition si inferieur à la derniere image
-          currentSlide++;
-      } else {//sinon reset de i
-          currentSlide=0;
+  //fonction slide suivant
+  nextSlide(){
+    this.currentSlide++;//increment de i
+    if( this.currentSlide <= this.indexImg ){
+        this.imgDisplayNone();//masque
+        this.currentImg = this.imgCarousel[this.currentSlide];//nouvelle img courante
+        this.currentImg.style.display = "block";//affiche nouvelle img courante
+      } else {// si i est passer à une valeur sup aux nb d'img
+        this.currentSlide = this.indexImg;
       };
-    imgDisplayNone();//masque
-    currentImg=imgCarousel[currentSlide];//nouvelle img courante
-    currentImg.style.display = "block";//affiche nouvelle img courante
+  };
+
+  //fonction slide precedent
+  prevSlide(){
+    this.currentSlide--;
+    if( this.currentSlide >= 0 ){
+      this.imgDisplayNone();
+      this.currentImg = this.imgCarousel[this.currentSlide];
+      this.currentImg.style.display = "block";
+    } else {
+      this.currentSlide = 0;
     };
-  },5000);
+  };
+
+  autoSlide(){
+    if (this.pauseState === false) {
+      if(this.currentSlide<this.indexImg){//condition si inferieur à la derniere image
+          this.currentSlide++;
+      } else {//sinon reset de i
+          this.currentSlide=0;
+      };
+    this.imgDisplayNone();//masque
+    this.currentImg=this.imgCarousel[this.currentSlide];//nouvelle img courante
+    this.currentImg.style.display = "block";//affiche nouvelle img courante
+    };
+  }
+
+  //fonction slide automatique des image
+  slideImg() {
+    setInterval(this.autoSlide.bind(this),5000);
+  };
 };
 
-slideImg();//premier lancement de la fonction de slide automatique
+const diaporamaTutoriel = new Diaporama("diaporama");
+
+diaporamaTutoriel.slideImg();
 
 //evenement appuie sur bouton pause
 document.getElementById("pause").addEventListener("click",function(){
-  pause = !pause;
+  diaporamaTutoriel.pauseState = !diaporamaTutoriel.pauseState;
 });
 
 //evenement clic sur bouton precedent
-document.getElementById("prev").addEventListener("click",prevSlide);
+document.getElementById("prev").addEventListener("click",function() {
+  diaporamaTutoriel.prevSlide();
+});
 
 //evenement clic sur bouton next
-document.getElementById("next").addEventListener("click",nextSlide);
+document.getElementById("next").addEventListener("click",function() {
+  diaporamaTutoriel.nextSlide()
+});
 
 //evenement appuie sur fleche droite ou gauche
 document.addEventListener("keydown", function(e) {
   if (e.keyCode === 37 ) {
-    prevSlide();
+    diaporamaTutoriel.prevSlide();
   }
   else if (e.keyCode === 39 ) {
-    nextSlide();
+    diaporamaTutoriel.nextSlide();
   };
 });
