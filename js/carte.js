@@ -31,10 +31,8 @@ class Map {
   appelJCDecaux() {
     console.log(this.stations);
     ajaxGet(this.url, function (reponse) {
-      console.log(this.stations);
       let reponseElt = JSON.parse(reponse);
       for (const item of reponseElt) {
-        console.log(this.stations);
         const marqueursInfos = {
           name: item.name,
           address: item.address,
@@ -44,9 +42,9 @@ class Map {
           lng: item.position.lng,
           status: item.status,
         };
-        this.stations.push(marqueursInfos);
+        this.stations.push(marqueursInfos);//TypeError: this is undefined
       };
-      this.updateMap();
+      this.updateMap();//TypeError: this is undefined
     });
   };
 
@@ -128,6 +126,8 @@ class Map {
         alert("Veuillez remplir le nom et le prénom")
       } else {
         //stocker données de reservation avec sessionstorage
+        /*a deplacer pour stocker aprés validation canvas
+        car bug si actualisation page durant signature*/
         sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
         sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
         //stocker données formulaire avec local storage
