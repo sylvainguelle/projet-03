@@ -41,7 +41,7 @@ class Map {
             lng: item.position.lng,
             status: item.status,
           };
-          stations.push(marqueursInfos);
+          this.stations.push(marqueursInfos);
         };
         updateMap();
     });
@@ -49,37 +49,37 @@ class Map {
 
   //fonction ajout ou maj des marqueurs sur la carte
   updateMap() {
-    calqueMarqueur.clearLayers();//effacer marqueurs
-    for (let i = 0; i < stations.length; i++) {
-      const marqueur = L.marker([stations[i].lat,stations[i].lng]);
-      marqueur.options.station = stations[i];
+    this.calqueMarqueur.clearLayers();//effacer marqueurs
+    for (let i = 0; i < this.stations.length; i++) {
+      const marqueur = L.marker([this.stations[i].lat,this.stations[i].lng]);
+      marqueur.options.station = this.stations[i];
       marqueur.on("click", function (e){
         if (document.getElementById("form-button") === null &
         document.getElementById("canvas-button") === null) {
           const currentMarker = e.target;
-          nameStationElt.textContent = currentMarker.options.station.name;
-          addressStationElt.textContent = currentMarker.options.station.address;
-          avBikesStationElt.textContent = currentMarker.options.station.bike;
-          avStandsStationElt.textContent = currentMarker.options.station.stand;
-          statutStationElt.textContent = currentMarker.options.station.status;
+          this.nameStationElt.textContent = currentMarker.options.station.name;
+          this.addressStationElt.textContent = currentMarker.options.station.address;
+          this.avBikesStationElt.textContent = currentMarker.options.station.bike;
+          this.avStandsStationElt.textContent = currentMarker.options.station.stand;
+          this.statutStationElt.textContent = currentMarker.options.station.status;
         } else {
           alert("Vous ne pouvez pas modifier la station lors d'un réservation")
         };
       });
       //verification position station par rapport limite de la carte affiché
-      if ((stations[i].lat<mymap.getBounds()._northEast.lat)&&
-      (stations[i].lat>mymap.getBounds()._southWest.lat)&&
-      (stations[i].lng<mymap.getBounds()._northEast.lng)&&
-      (stations[i].lng>mymap.getBounds()._southWest.lng)) {
+      if ((this.stations[i].lat<this.mymap.getBounds()._northEast.lat)&&
+      (this.stations[i].lat>this.mymap.getBounds()._southWest.lat)&&
+      (this.stations[i].lng<this.mymap.getBounds()._northEast.lng)&&
+      (this.stations[i].lng>this.mymap.getBounds()._southWest.lng)) {
         //generer marqueur
-        marqueur.addTo(calqueMarqueur);
+        marqueur.addTo(this.calqueMarqueur);
       };
     };
   };
 
   //fonction formulaire inscription
   AddInscriptionForm() {
-    inscriptionButton.style.display = "none";//masque le bouton de reservation
+    this.inscriptionButton.style.display = "none";//masque le bouton de reservation
     //ajout du formulaire
     /*const formBr = document.createElement("br");*/
     const formNom = document.createElement("input");
@@ -141,14 +141,12 @@ class Map {
 
   //fonction mise à jour div reservation
   addReservation() {
-    inscriptionButton.style.display = "block";
+    this.inscriptionButton.style.display = "block";
     document.getElementById("reservation").textContent =
     "Vous avez réservé un velo à la station " +
     sessionStorage.getItem("stationReserve") + ", " +
     sessionStorage.getItem("adresseReserve");
-    const majNombreVelo = parseInt(avBikesStationElt.textContent,10)-1;
-    avBikesStationElt.textContent = majNombreVelo;
-    timerReservation();
+    this.timerReservation();
     document.getElementById("bouton-inscription-info").textContent = "la réservation d'un nouveau velo annulera la réservation en cours";
   };
 
@@ -157,29 +155,24 @@ class Map {
     //variable time calculer à partir de sessionstorage
     const dateNow = new Date().getTime();
     const dateReservation = parseInt(sessionStorage.getItem("heureFinReservation"),10);
-    time = (dateReservation-dateNow);
+    this.time = (dateReservation-dateNow);
     //function timer
     function timer() {
-      time = (time-1000);
-      const minute = Math.floor(time / 60000);
-      const second = ((time%60000)/1000).toFixed(0);
+      this.time = (this.time-1000);
+      const minute = Math.floor(this.time / 60000);
+      const second = ((this.time%60000)/1000).toFixed(0);
       document.getElementById("timer").textContent = "réservation valide pendant : "
       + minute + " minute(s) " + (second<10 ?"0":"") + second + " seconde(s) ";
       //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
-      if (time<0) {
+      if (this.time<0) {
         clearInterval(interval);
         document.getElementById("timer").textContent = "";
         document.getElementById("reservation").textContent = "Pas de réservation en cours";
         document.getElementById("bouton-inscription-info").textContent = "";
         alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
         sessionStorage.clear();
-        /*reservationEnCours = false;*/
       };
     };
-    //evenement au clic par l'utilisateur pour arreter la reservation
-    /*inscriptionButton.addEventListener("click",function(){
-    });*/
-    //lancement timer avec intervalle 1 secondes
     const interval = setInterval(timer, 1000);
   };
 
@@ -193,7 +186,7 @@ class Map {
       };
     };
   };
-};//class
+};
 
 const mapLyon = new Map ("https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058",
 45.760033,4.838189,15);
@@ -209,19 +202,19 @@ mapLyon.mymap.on("moveend",function (){
 });
 
 //evenement clic sur le bouton d'incription
-mapLyoninscriptionButton.addEventListener("click",function () {
-  time = 0;//repasse time à 0 pour annuler une reservation existante
-  if (nameStationElt.textContent.length === 0) {
+mapLyon.inscriptionButton.addEventListener("click",function () {
+  mapLyon.time = 0;//repasse time à 0 pour annuler une reservation existante
+  if (mapLyon.nameStationElt.textContent.length === 0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
     },5000);
-  } else if (Number(avBikesStationElt.textContent)===0) {
+  } else if (Number(mapLyon.avBikesStationElt.textContent)===0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
     },5000);
-  } else if (statutStationElt.textContent === "CLOSED") {
+  } else if (mapLyon.statutStationElt.textContent === "CLOSED") {
     document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
