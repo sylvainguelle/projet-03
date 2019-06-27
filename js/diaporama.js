@@ -1,15 +1,29 @@
 class Diaporama {
-  constructor (diaporamaId) {
+  constructor (diaporamaId,pauseBtnId,prevBtnId,nextBtnId) {
     this.carousel = document.getElementById(diaporamaId);// cible la div du diapo
     this.imgCarousel = this.carousel.querySelectorAll("img");// cible tableau les img du diapo
     this.indexImg = this.imgCarousel.length - 1;// creation index selon nombre image
     this.pauseState = false;// variable etat bouton pause
+    this.pauseButton = document.getElementById(pauseBtnId);
+    this.prevButton = document.getElementById(prevBtnId);
+    this.nextButton = document.getElementById(nextBtnId);
     //inialisation du diapo
     this.currentSlide = 0;
     this.currentImg = this.imgCarousel[this.currentSlide];//definition de l'image courante = 0
     this.imgDisplayNone();
     this.currentImg.style.display = "block";//affiche l'image courrante
+    //ecouteur d'evenement
+    this.pauseButton.addEventListener("click",()=> {
+      this.pause();
+    });
+    this.prevButton.addEventListener("click",()=> {
+      this.prevSlide()
+    });
+    this.nextButton.addEventListener("click",()=> {
+      this.nextSlide();
+    });
   }
+
   //fonction masquer toute les images
   imgDisplayNone() {
     for (let i=0;i < this.imgCarousel.length;i++) {
@@ -58,18 +72,18 @@ class Diaporama {
   slideImg() {
     setInterval(this.autoSlide.bind(this),5000);
   };
+
+  //fonction pause
+  pause(){
+    this.pauseState = !this.pauseState;
+  };
 };
 
-const diaporamaTutoriel = new Diaporama("diaporama");
+const diaporamaTutoriel = new Diaporama("diaporama","btn-pause-tuto","btn-prev-tuto","btn-next-tuto");
 
 diaporamaTutoriel.slideImg();
 
-//evenement appuie sur bouton pause
-document.getElementById("pause").addEventListener("click",function(){
-  diaporamaTutoriel.pauseState = !diaporamaTutoriel.pauseState;
-});
-
-//evenement clic sur bouton precedent
+/*//evenement clic sur bouton precedent
 document.getElementById("prev").addEventListener("click",function() {
   diaporamaTutoriel.prevSlide();
 });
@@ -77,7 +91,7 @@ document.getElementById("prev").addEventListener("click",function() {
 //evenement clic sur bouton next
 document.getElementById("next").addEventListener("click",function() {
   diaporamaTutoriel.nextSlide()
-});
+});*/
 
 //evenement appuie sur fleche droite ou gauche
 document.addEventListener("keydown", function(e) {

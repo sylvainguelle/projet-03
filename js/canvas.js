@@ -92,8 +92,11 @@ function canvas() {
 			document.getElementById(canvasSignature.divInsertCanvas).removeChild(canvasSignature.divCanvas);
 			//obtenir heure de fin de reservation et la stocker avec sessionstorage
       const dateEndReservation = new Date().getTime()+20*60*1000;
+			//stocker données de reservation avec sessionstorage
       sessionStorage.setItem("heureFinReservation",dateEndReservation);
-    	addReservation();
+			sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
+			sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
+    	mapLyon.addReservation();
 		};
 	});
 };

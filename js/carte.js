@@ -29,8 +29,7 @@ class Map {
 
   //function requete vers api JCDecaux et maj tableau stations
   appelJCDecaux() {
-    console.log(this.stations);
-    ajaxGet(this.url, function (reponse) {
+    ajaxGet(this.url, (reponse) => {
       let reponseElt = JSON.parse(reponse);
       for (const item of reponseElt) {
         const marqueursInfos = {
@@ -54,7 +53,7 @@ class Map {
     for (let i = 0; i < this.stations.length; i++) {
       const marqueur = L.marker([this.stations[i].lat,this.stations[i].lng]);
       marqueur.options.station = this.stations[i];
-      marqueur.on("click", function (e){
+      marqueur.on("click", (e)=>{
         if (document.getElementById("form-button") === null &
         document.getElementById("canvas-button") === null) {
           const currentMarker = e.target;
@@ -125,11 +124,6 @@ class Map {
       if (formNom.value.length===0||formPrenom.value.length===0) {
         alert("Veuillez remplir le nom et le prénom")
       } else {
-        //stocker données de reservation avec sessionstorage
-        /*a deplacer pour stocker aprés validation canvas
-        car bug si actualisation page durant signature*/
-        sessionStorage.setItem("stationReserve",document.getElementById("nomStation").innerText);
-        sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
         //stocker données formulaire avec local storage
         localStorage.setItem("nom",form[0].value) ;
         localStorage.setItem("prenom",form[1].value);
@@ -158,34 +152,41 @@ class Map {
     //variable time calculer à partir de sessionstorage
     const dateNow = new Date().getTime();
     const dateReservation = parseInt(sessionStorage.getItem("heureFinReservation"),10);
+    console.log(this.time);
     this.time = (dateReservation-dateNow);
-    //function timer
-    function timer() {
-      this.time = (this.time-1000);
-      const minute = Math.floor(this.time / 60000);
-      const second = ((this.time%60000)/1000).toFixed(0);
-      document.getElementById("timer").textContent = "réservation valide pendant : "
-      + minute + " minute(s) " + (second<10 ?"0":"") + second + " seconde(s) ";
-      //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
-      if (this.time<0) {
-        clearInterval(interval);
-        document.getElementById("timer").textContent = "";
-        document.getElementById("reservation").textContent = "Pas de réservation en cours";
-        document.getElementById("bouton-inscription-info").textContent = "";
-        alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
-        sessionStorage.clear();
-      };
+    console.log(this.time);
+    this.interval = setInterval(this.timer.bind(this), 1000);
+  };
+
+  //function timer
+  timer() {
+    this.time = (this.time-1000);
+    const minute = Math.floor(this.time / 60000);
+    const second = ((this.time%60000)/1000).toFixed(0);
+    document.getElementById("timer").textContent = "réservation valide pendant : "
+    + minute + " minute(s) " + (second<10 ?"0":"") + second + " seconde(s) ";
+    //condition arret timer au bout de 20 minutes ou si l'utilisateur relance une reservation
+    if (this.time<0) {
+      clearInterval(this.interval);
+      document.getElementById("timer").textContent = "";
+      document.getElementById("reservation").textContent = "Pas de réservation en cours";
+      document.getElementById("bouton-inscription-info").textContent = "";
+      alert("Réservation à la station "+sessionStorage.getItem("stationReserve")+" expirée/annulée");
+      sessionStorage.removeItem("stationReserve");
+      sessionStorage.removeItem("adresseReserve");
+      sessionStorage.removeItem("heureFinReservation");
     };
-    const interval = setInterval(timer, 1000);
   };
 
   //fonction de verification si une reservation existe pendant la session
   verificationReservation() {
     if (sessionStorage.getItem("stationReserve") != null){
       if (confirm("Voulez-vous reprendre votre réservation d'un velo à la station "+sessionStorage.getItem("stationReserve")+" ?")){
-        addReservation();
+        mapLyon.addReservation();
       } else {
-        sessionStorage.clear();
+        sessionStorage.removeItem("stationReserve");
+        sessionStorage.removeItem("adresseReserve");
+        sessionStorage.removeItem("heureFinReservation");
       };
     };
   };
@@ -211,17 +212,17 @@ mapLyon.inscriptionButton.addEventListener("click",function () {
     document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
-    },5000);
+    },2000);
   } else if (Number(mapLyon.avBikesStationElt.textContent)===0) {
     document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
-    },5000);
+    },2000);
   } else if (mapLyon.statutStationElt.textContent === "CLOSED") {
     document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
     setTimeout(function() {
       document.getElementById("bouton-inscription-info").textContent = "";
-    },5000);
+    },2000);
   } else {
     //afficher formulaire
     mapLyon.AddInscriptionForm();
