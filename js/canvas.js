@@ -21,13 +21,21 @@ class Canvas {
 	  this.divCanvas.appendChild(document.createElement("br"));
 	  this.divCanvas.appendChild(this.canvasButton);
 		document.getElementById(this.divInsertCanvas).appendChild(this.divCanvas);
-
 		//variable de tracking de position
 		this.mousePos = {x:0,y:0};
 		this.lastPos = {x:0,y:0};
 		//variable état si dessin en cours
 		this.drawing = false;
+		//ecouteurs d'evenements
+		this.canvas.addEventListener("mousemove",this.trackMouse.bind(this));
+		this.canvas.addEventListener("touchmove",this.trackTouch.bind(this));
+		this.canvas.addEventListener("mousedown",this.startDrawingMouse.bind(this));
+		this.canvas.addEventListener("touchstart",this.startDrawingTouch.bind(this));
+		this.canvas.addEventListener("mouseup",this.stopDrawingMouse.bind(this));
+		this.canvas.addEventListener("touchend",this.stopDrawingTouch.bind(this));
+		this.canvasButton.addEventListener("click",this.validateCanvas.bind(this));
 	}
+	//fonction dessin
 	drawLine() {
 		if (this.drawing === true) {
 			this.signatureOk = true;
@@ -36,60 +44,56 @@ class Canvas {
 			this.ctx.stroke();
 		};
 	};
-};
-
-function canvas() {
-
-	const canvasSignature = new Canvas("formulaire-inscription");
-
-	//evenement au mouvement de la souris pour avoir la position du curseur
-	canvasSignature.canvas.addEventListener("mousemove", function(e) {
+	//fonction tracking souris
+	trackMouse(e) {
 		//nouvelle position
-		canvasSignature.mousePos.x = e.clientX - canvasSignature.canvas.getBoundingClientRect().left;
-		canvasSignature.mousePos.y = e.clientY - canvasSignature.canvas.getBoundingClientRect().top;
+		this.mousePos.x = e.clientX - this.canvas.getBoundingClientRect().left;
+		this.mousePos.y = e.clientY - this.canvas.getBoundingClientRect().top;
+		console.log(this.mousePos.x+" "+this.mousePos.y);
 		//lancer le dessin
-		canvasSignature.drawLine();
+		this.drawLine();
 		//derniere position
-		canvasSignature.lastPos.x = e.clientX - canvasSignature.canvas.getBoundingClientRect().left;
-		canvasSignature.lastPos.y = e.clientY  - canvasSignature.canvas.getBoundingClientRect().top;
-	});
-
-	//evenement tactile au mouvement pour avoir la position du doigt
-	canvasSignature.canvas.addEventListener("touchmove",function(e) {
-		canvasSignature.mousePos.x = e.touches[0].clientX - canvasSignature.canvas.getBoundingClientRect().left;
-		canvasSignature.mousePos.y = e.touches[0].clientY - canvasSignature.canvas.getBoundingClientRect().top;
-		canvasSignature.drawLine();
-		canvasSignature.lastPos.x = e.touches[0].clientX - canvasSignature.canvas.getBoundingClientRect().left;
-		canvasSignature.lastPos.y = e.touches[0].clientY - canvasSignature.canvas.getBoundingClientRect().top;
+		this.lastPos.x = e.clientX - this.canvas.getBoundingClientRect().left;
+		this.lastPos.y = e.clientY  - this.canvas.getBoundingClientRect().top;
+		console.log(this.lastPos.x+" "+this.lastPos.y);
+	};
+	//fonction tracking tactile
+	trackTouch(e) {
+		this.mousePos.x = e.touches[0].clientX - this.canvas.getBoundingClientRect().left;
+		this.mousePos.y = e.touches[0].clientY - this.canvas.getBoundingClientRect().top;
+		this.drawLine();
+		this.lastPos.x = e.touches[0].clientX - this.canvas.getBoundingClientRect().left;
+		this.lastPos.y = e.touches[0].clientY - this.canvas.getBoundingClientRect().top;
 		e.preventDefault();
-	});
-
-	canvasSignature.canvas.addEventListener("mousedown", function() {
-		canvasSignature.drawing = true;
-	});
-
-	canvasSignature.canvas.addEventListener("touchstart", function(e) {
-		canvasSignature.lastPos.x = e.touches[0].clientX - canvasSignature.canvas.getBoundingClientRect().left;
-		canvasSignature.lastPos.y = e.touches[0].clientY - canvasSignature.canvas.getBoundingClientRect().top;
-		canvasSignature.drawing = true;
+	};
+	//fonction demarrer dessin souris
+	startDrawingMouse() {
+		this.drawing = true;
+		console.log(this.drawing);
+	};
+	//fonction demarrer dessin tactile
+	startDrawingTouch(e) {
+		this.lastPos.x = e.touches[0].clientX - this.canvas.getBoundingClientRect().left;
+		this.lastPos.y = e.touches[0].clientY - this.canvas.getBoundingClientRect().top;
+		this.drawing = true;
 		e.preventDefault();
-	});
-
-	canvasSignature.canvas.addEventListener("mouseup", function() {
-		canvasSignature.drawing = false;
-	});
-
-	canvasSignature.canvas.addEventListener("touchend", function(e) {
-		canvasSignature.drawing = false;
+	};
+	//stopper dessin souris
+	stopDrawingMouse() {
+		this.drawing = false;
+		console.log(this.drawing);
+	};
+	//stopper dessin tactile
+	stopDrawingTouch(e) {
+		this.drawing = false;
 		e.preventDefault();
-	});
-
-	//validation de la signature au clic
-	canvasSignature.canvasButton.addEventListener("click", function () {
-		if (canvasSignature.signatureOk === false) {
+	};
+	//validation du canvas
+	validateCanvas() {
+		if (this.signatureOk === false) {
 			alert("Veuillez signer dans le champ de signature");
 		} else {
-			document.getElementById(canvasSignature.divInsertCanvas).removeChild(canvasSignature.divCanvas);
+			document.getElementById(this.divInsertCanvas).removeChild(this.divCanvas);
 			//obtenir heure de fin de reservation et la stocker avec sessionstorage
       const dateEndReservation = new Date().getTime()+20*60*1000;
 			//stocker données de reservation avec sessionstorage
@@ -98,5 +102,9 @@ function canvas() {
 			sessionStorage.setItem("adresseReserve",document.getElementById("adresseStation").innerText);
     	mapLyon.addReservation();
 		};
-	});
+	};
+};
+
+function canvas() {
+	const canvasSignature = new Canvas("formulaire-inscription");
 };
