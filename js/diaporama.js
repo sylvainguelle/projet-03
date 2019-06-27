@@ -7,10 +7,14 @@ class Diaporama {
     this.pauseButton = document.getElementById(pauseBtnId);
     this.prevButton = document.getElementById(prevBtnId);
     this.nextButton = document.getElementById(nextBtnId);
+    this.iconPause = document.getElementById("icon-pause-tuto");
+    this.iconPlay = document.getElementById("icon-play-tuto");
     //inialisation du diapo
     this.currentSlide = 0;
     this.currentImg = this.imgCarousel[this.currentSlide];//definition de l'image courante = 0
     this.imgDisplayNone();
+    this.updatePauseStyle();
+    this.slideImg();
     this.currentImg.style.display = "block";//affiche l'image courrante
     //ecouteur d'evenement
     this.pauseButton.addEventListener("click",()=> {
@@ -21,6 +25,15 @@ class Diaporama {
     });
     this.nextButton.addEventListener("click",()=> {
       this.nextSlide();
+    });
+    //evenement appuie sur fleche droite ou gauche
+    document.addEventListener("keydown", (e)=> {
+      if (e.keyCode === 37 ) {
+        this.prevSlide();
+      }
+      else if (e.keyCode === 39 ) {
+        this.nextSlide();
+      };
     });
   }
 
@@ -76,29 +89,18 @@ class Diaporama {
   //fonction pause
   pause(){
     this.pauseState = !this.pauseState;
+    this.updatePauseStyle();
   };
+
+  updatePauseStyle() {
+    if (this.pauseState === false){
+      this.iconPause.style.display = "block";
+      this.iconPlay.style.display = "none";
+    } else {
+      this.iconPause.style.display = "none";
+      this.iconPlay.style.display = "block";
+    }
+  }
 };
 
-const diaporamaTutoriel = new Diaporama("diaporama","btn-pause-tuto","btn-prev-tuto","btn-next-tuto");
-
-diaporamaTutoriel.slideImg();
-
-/*//evenement clic sur bouton precedent
-document.getElementById("prev").addEventListener("click",function() {
-  diaporamaTutoriel.prevSlide();
-});
-
-//evenement clic sur bouton next
-document.getElementById("next").addEventListener("click",function() {
-  diaporamaTutoriel.nextSlide()
-});*/
-
-//evenement appuie sur fleche droite ou gauche
-document.addEventListener("keydown", function(e) {
-  if (e.keyCode === 37 ) {
-    diaporamaTutoriel.prevSlide();
-  }
-  else if (e.keyCode === 39 ) {
-    diaporamaTutoriel.nextSlide();
-  };
-});
+const diaporamaTutoriel = new Diaporama("diaporama-tuto","btn-pause-tuto","btn-prev-tuto","btn-next-tuto");

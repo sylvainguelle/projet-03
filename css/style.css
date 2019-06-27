@@ -19,7 +19,7 @@ p {
   font-size: 1rem
 }
 
-#diaporama{
+#diaporama-tuto{
   position: relative;
   width: 800px;
   height: 402px;
@@ -77,7 +77,7 @@ li {
 
 /* Extra small devices (portrait phones, less than 576px)*/
 @media (max-width: 575.98px) {
-#diaporama{
+#diaporama-tuto{
   width: 345px;
   height: 175px;
 }
@@ -88,7 +88,7 @@ li {
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) and (max-width: 767.98px) {
-  #diaporama{
+  #diaporama-tuto{
     width: 560px;
     height: 281px;
   }
@@ -99,7 +99,7 @@ li {
 
 /* Medium devices (tablets, 768px and up)*/
 @media (min-width: 768px) and (max-width: 991.98px) {
-  #diaporama{
+  #diaporama-tuto{
     width: 738px;
     height: 370px;
   }
@@ -110,7 +110,7 @@ li {
 
 /* Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) and (max-width: 1199.98px) {
-  #diaporama{
+  #diaporama-tuto{
     width: 1000px;
     height: 501px;
   }
@@ -121,7 +121,7 @@ li {
 
 /* Extra large devices (large desktops, 1200px and up)*/
 @media (min-width: 1200px) {
-  #diaporama{
+  #diaporama-tuto{
     width: 1200px;
     height: 544px;
   }
