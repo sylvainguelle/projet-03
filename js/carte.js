@@ -1,6 +1,5 @@
 class Map {
   constructor (urlContract,latContract,lngContract,zoom) {
-    //declaration variable
     this.mymap = L.map("carte").setView([latContract,lngContract],zoom);//inialisation carte avec centre et zoom
     this.calqueMarqueur = L.layerGroup().addTo(this.mymap); // creation calque pour affichage des marqueurs
     //option de la carte mapbox
@@ -10,12 +9,9 @@ class Map {
         id: "mapbox.streets",
         accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJjandodnUwbzEwZGx3NDJtano3ZHY3MHlhIn0.zglA2Ncbo2bLKAnY55hK7g"
     }).addTo(this.mymap);
-
     this.url = urlContract;
-
     this.stations = [];// inialisation tableau des stations
     this.time = 0; //variable pour le timer de reservation
-
     //element dom à mettre à jour
     this.nameStationElt = document.getElementById("nomStation");
     this.addressStationElt = document.getElementById("adresseStation");
@@ -24,8 +20,12 @@ class Map {
     this.inscriptionButton = document.getElementById("bouton-incription");
     this.reservationElt = document.getElementById("reservation");
     this.statutStationElt = document.getElementById("statutStation");
+    //initialisation
+    this.appelJCDecaux();
+    //ecouteur evenements
+    this.mymap.on("moveend",this.updateMap.bind(this));
+    this.inscriptionButton.addEventListener("click",this.clicReservation.bind(this));
   };
-
 
   //function requete vers api JCDecaux et maj tableau stations
   appelJCDecaux() {
@@ -76,6 +76,30 @@ class Map {
       };
     };
   };
+
+  //fonction clic sur bouton reservation
+  clicReservation() {
+    this.time = 0;//repasse time à 0 pour annuler une reservation existante
+    if (this.nameStationElt.textContent.length === 0) {
+      document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
+      setTimeout(function() {
+        document.getElementById("bouton-inscription-info").textContent = "";
+      },2000);
+    } else if (Number(this.avBikesStationElt.textContent)===0) {
+      document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
+      setTimeout(function() {
+        document.getElementById("bouton-inscription-info").textContent = "";
+      },2000);
+    } else if (this.statutStationElt.textContent === "CLOSED") {
+      document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
+      setTimeout(function() {
+        document.getElementById("bouton-inscription-info").textContent = "";
+      },2000);
+    } else {
+      //afficher formulaire
+      this.AddInscriptionForm();
+    };
+  }
 
   //fonction formulaire inscription
   AddInscriptionForm() {
@@ -194,37 +218,5 @@ class Map {
 
 const mapLyon = new Map ("https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=3c65f322235f7ce3680b5ba51ce05b8811041058",
 45.760033,4.838189,15);
-//lancement de la fonction d'appel
-mapLyon.appelJCDecaux();
 
-//lancement de la fonction de verification si reservation en cours pendant la session
 mapLyon.verificationReservation();
-
-//evenement MAJ des marqueurs à la fin d'un deplacement de la carte
-mapLyon.mymap.on("moveend",function (){
-  mapLyon.updateMap();
-});
-
-//evenement clic sur le bouton d'incription
-mapLyon.inscriptionButton.addEventListener("click",function () {
-  mapLyon.time = 0;//repasse time à 0 pour annuler une reservation existante
-  if (mapLyon.nameStationElt.textContent.length === 0) {
-    document.getElementById("bouton-inscription-info").textContent = "pas de station selectionnée";
-    setTimeout(function() {
-      document.getElementById("bouton-inscription-info").textContent = "";
-    },2000);
-  } else if (Number(mapLyon.avBikesStationElt.textContent)===0) {
-    document.getElementById("bouton-inscription-info").textContent = "pas de velo disponible";
-    setTimeout(function() {
-      document.getElementById("bouton-inscription-info").textContent = "";
-    },2000);
-  } else if (mapLyon.statutStationElt.textContent === "CLOSED") {
-    document.getElementById("bouton-inscription-info").textContent = "la station est fermée";
-    setTimeout(function() {
-      document.getElementById("bouton-inscription-info").textContent = "";
-    },2000);
-  } else {
-    //afficher formulaire
-    mapLyon.AddInscriptionForm();
-  };
-});
