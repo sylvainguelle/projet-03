@@ -7,7 +7,7 @@ class Map {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
         id: "mapbox.streets",
-        accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJja3RsdWwwbXMxejg3MnpxbmM2eDZjc3p6In0.24nJYZuzASiqSiVIO6qBxg"
+        accessToken: "pk.eyJ1Ijoic3lsdmFpbmd1ZWxsZSIsImEiOiJja3RsdW8wMXkwNjM0MnZwYmg0aGVjcHd2In0.a5ZK-Il7j3elBxenH4dFfg"
     }).addTo(this.mymap);
     this.url = urlContract;
     this.stations = [];// inialisation tableau des stations
